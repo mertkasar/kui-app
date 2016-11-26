@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.mertkasar.kui.models.Answer;
 import com.mertkasar.kui.models.Question;
 
 public final class Database {
@@ -19,17 +20,23 @@ public final class Database {
     private FirebaseDatabase firebaseDB;
 
     public DatabaseReference refQuestions;
+    public DatabaseReference refQuestionAnswers;
 
     private Database() {
         firebaseDB = FirebaseDatabase.getInstance();
         firebaseDB.setPersistenceEnabled(true);
 
         refQuestions = firebaseDB.getReference("questions");
+        refQuestionAnswers = firebaseDB.getReference("question-answers");
 
         Log.d(TAG, "Database: Created");
     }
 
-    public Task<Void> postNewQuestion(Question question){
+    public Task<Void> createNewQuestion(Question question){
         return refQuestions.push().setValue(question);
+    }
+
+    public Task<Void> createNewAnswer(String questionKey, Answer answer){
+        return refQuestionAnswers.child(questionKey).push().setValue(answer);
     }
 }
