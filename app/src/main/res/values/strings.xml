@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Kui</string>
+    <string name="post_question">Posted successfully.</string>
 </resources>
