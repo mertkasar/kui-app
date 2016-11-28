@@ -11,6 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.mertkasar.kui.models.Answer;
+import com.mertkasar.kui.models.Course;
 import com.mertkasar.kui.models.Question;
 
 public final class Database {
@@ -24,32 +25,70 @@ public final class Database {
 
     private FirebaseDatabase firebaseDB;
 
+    public DatabaseReference refCourses;
     public DatabaseReference refQuestions;
-    public DatabaseReference refQuestionAnswers;
+    public DatabaseReference refAnswers;
 
     private Database() {
         firebaseDB = FirebaseDatabase.getInstance();
         firebaseDB.setPersistenceEnabled(true);
 
+        refCourses = firebaseDB.getReference("courses");
         refQuestions = firebaseDB.getReference("questions");
-        refQuestionAnswers = firebaseDB.getReference("question-answers");
+        refAnswers = firebaseDB.getReference("answers");
 
         Log.d(TAG, "Database: Created");
     }
 
-    public Task<Void> createNewQuestion(final Question question) {
-        //TODO: Validate question has 10 options max
-        return refQuestions.push().setValue(question);
+    public Task<Void> createNewCourse(final Course course) {
+        return refCourses.push().setValue(course);
     }
 
-    public Task<Void> createNewAnswer(final String questionKey, final Answer answer) {
-        Task<Void> task = refQuestionAnswers.child(questionKey).push().setValue(answer);
+    public Task<Void> createNewQuestion(final String courseKey, final Question question) {
+        Task<Void> task = refQuestions.child(courseKey).push().setValue(question);
 
         // Update corresponding question stats upon success
         task.addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                refQuestions.child(questionKey).runTransaction(new Transaction.Handler() {
+                refCourses.child(courseKey).runTransaction(new Transaction.Handler() {
+                    @Override
+                    public Transaction.Result doTransaction(MutableData mutableData) {
+                        //Retrieve the course
+                        Course course = mutableData.getValue(Course.class);
+                        if (course == null) {
+                            Log.d(TAG, "doTransaction: Cant find the course");
+                            return Transaction.success(mutableData);
+                        }
+
+                        //Update stats
+                        course.question_count = course.question_count + 1;
+
+                        //Finish transaction and report success
+                        mutableData.setValue(course);
+                        return Transaction.success(mutableData);
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                        Log.d(TAG, "onComplete: Course updated. Error:" + databaseError);
+                    }
+                });
+            }
+        });
+
+        //TODO: Validate question has 10 options max
+        return task;
+    }
+
+    public Task<Void> createNewAnswer(final String courseKey, final String questionKey, final Answer answer) {
+        Task<Void> task = refAnswers.child(questionKey).push().setValue(answer);
+
+        // Update corresponding question stats upon success
+        task.addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                refQuestions.child(courseKey).child(questionKey).runTransaction(new Transaction.Handler() {
                     @Override
                     public Transaction.Result doTransaction(MutableData mutableData) {
                         // Retrieve the question
@@ -70,7 +109,7 @@ public final class Database {
 
                     @Override
                     public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-                        Log.d(TAG, "onComplete: Question updated " + databaseError);
+                        Log.d(TAG, "onComplete: Question updated. Error:" + databaseError);
                     }
                 });
             }
