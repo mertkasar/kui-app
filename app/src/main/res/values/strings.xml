@@ -2,4 +2,5 @@
     <string name="app_name">Kui</string>
     <string name="toast_create_course">Course created</string>
     <string name="toast_create_question">Posted successfully.</string>
+    <string name="toast_create_user">User created</string>
 </resources>

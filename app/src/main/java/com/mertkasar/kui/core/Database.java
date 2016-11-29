@@ -13,6 +13,7 @@ import com.google.firebase.database.Transaction;
 import com.mertkasar.kui.models.Answer;
 import com.mertkasar.kui.models.Course;
 import com.mertkasar.kui.models.Question;
+import com.mertkasar.kui.models.User;
 
 public final class Database {
     private final String TAG = Database.class.getSimpleName();
@@ -25,6 +26,7 @@ public final class Database {
 
     private FirebaseDatabase firebaseDB;
 
+    public DatabaseReference refUsers;
     public DatabaseReference refCourses;
     public DatabaseReference refQuestions;
     public DatabaseReference refAnswers;
@@ -33,11 +35,16 @@ public final class Database {
         firebaseDB = FirebaseDatabase.getInstance();
         firebaseDB.setPersistenceEnabled(true);
 
+        refUsers = firebaseDB.getReference("users");
         refCourses = firebaseDB.getReference("courses");
         refQuestions = firebaseDB.getReference("questions");
         refAnswers = firebaseDB.getReference("answers");
 
         Log.d(TAG, "Database: Created");
+    }
+
+    public Task<Void> createNewUser(final String uid, final User user) {
+        return refUsers.child(uid).setValue(user);
     }
 
     public Task<Void> createNewCourse(final Course course) {

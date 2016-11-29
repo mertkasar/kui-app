@@ -10,12 +10,14 @@ import com.mertkasar.kui.core.Database;
 import com.mertkasar.kui.models.Answer;
 import com.mertkasar.kui.models.Course;
 import com.mertkasar.kui.models.Question;
+import com.mertkasar.kui.models.User;
 
 import java.util.HashMap;
 
 public class DemoActivity extends AppCompatActivity {
     private final String TAG = DemoActivity.class.getSimpleName();
 
+    private final String USER_KEY = "-AbC68u";
     private final String COURSE_KEY = "-KXfg48qX_zPZrn9gdC5";
     private final String QUESTION_KEY = "-KXgEJNNTrZPXawBquDf";
 
@@ -27,6 +29,16 @@ public class DemoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_demo);
 
         db = Database.getInstance();
+    }
+
+    public void onCreateUButtonClick(View view) {
+        User newUser = new User("Mert Kasar", "mertkasar93@gmail.com", User.Type.STUDENT);
+        db.createNewUser(USER_KEY, newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(DemoActivity.this, R.string.toast_create_user, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void onPostCButtonClick(View view) {
