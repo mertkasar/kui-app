@@ -12,7 +12,7 @@ public class Course {
 
     public Object created_at;
     public Integer question_count;
-    public HashMap<String, Boolean> students;
+    public Integer subscriber_count;
 
     public Course() {
 
@@ -25,7 +25,7 @@ public class Course {
 
         created_at = ServerValue.TIMESTAMP;
         question_count = 0;
-        students = new HashMap<>();
+        subscriber_count = 0;
     }
 
     @Exclude
@@ -35,10 +35,5 @@ public class Course {
 
         // Convert timestamp to Base36
         return Long.toString((long) created_at, 36);
-    }
-
-    @Exclude
-    public void addStudent(final String studentKey) {
-        students.put(studentKey, true);
     }
 }

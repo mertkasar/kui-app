@@ -31,6 +31,8 @@ public final class Database {
     private DatabaseReference refCourses;
     private DatabaseReference refQuestions;
     private DatabaseReference refAnswers;
+    private DatabaseReference refSubscriptions;
+    private DatabaseReference refSubscribers;
 
     private Database() {
         firebaseDB = FirebaseDatabase.getInstance();
@@ -40,6 +42,8 @@ public final class Database {
         refCourses = firebaseDB.getReference("courses");
         refQuestions = firebaseDB.getReference("questions");
         refAnswers = firebaseDB.getReference("answers");
+        refSubscriptions = firebaseDB.getReference("subscriptions");
+        refSubscribers = firebaseDB.getReference("subscribers");
 
         Log.d(TAG, "Database: Created");
     }
@@ -48,8 +52,45 @@ public final class Database {
         return refUsers.child(uid).setValue(user);
     }
 
-    public DatabaseReference retrieveUser(String key) {
+    public DatabaseReference retrieveUser(final String key) {
         return refUsers.child(key);
+    }
+
+    public Task<Void> subscribeUser(final String userKey, final String courseKey) {
+        Task<Void> task = refSubscriptions.child(userKey).child(courseKey).setValue(true);
+
+        task.addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                refSubscribers.child(courseKey).child(userKey).setValue(true);
+
+                refCourses.child(courseKey).runTransaction(new Transaction.Handler() {
+                    @Override
+                    public Transaction.Result doTransaction(MutableData mutableData) {
+                        //Retrieve the course
+                        Course course = mutableData.getValue(Course.class);
+                        if (course == null) {
+                            Log.d(TAG, "doTransaction: Cant find the course");
+                            return Transaction.success(mutableData);
+                        }
+
+                        //Update stats
+                        course.subscriber_count = course.subscriber_count + 1;
+
+                        //Finish transaction and report success
+                        mutableData.setValue(course);
+                        return Transaction.success(mutableData);
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+
+                    }
+                });
+            }
+        });
+
+        return task;
     }
 
     public Task<Void> createCourse(final Course course) {

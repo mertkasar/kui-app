@@ -24,7 +24,7 @@ public class DemoActivity extends AppCompatActivity {
     private final String TAG = DemoActivity.class.getSimpleName();
 
     private final String USER_KEY = "-AbC68u";
-    private final String COURSE_KEY = "-KXfg48qX_zPZrn9gdC5";
+    private final String COURSE_KEY = "-KY60lbBXU9CjugrEnn5";
     private final String QUESTION_KEY = "-KXgEJNNTrZPXawBquDf";
     private final String ANSWER_KEY = "-KXgEVSmdr4wPUel2lHv";
 
@@ -61,7 +61,7 @@ public class DemoActivity extends AppCompatActivity {
     }
 
     public void onPostQButtonClick(View view) {
-        if (!app.isConnected()){
+        if (!app.isConnected()) {
             Toast.makeText(this, R.string.toast_disconnected, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -82,7 +82,7 @@ public class DemoActivity extends AppCompatActivity {
     }
 
     public void onPostAButtonClick(View view) {
-        if (!app.isConnected()){
+        if (!app.isConnected()) {
             Toast.makeText(this, R.string.toast_disconnected, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -98,7 +98,7 @@ public class DemoActivity extends AppCompatActivity {
         });
     }
 
-    public void onGetUButtonClick(View view){
+    public void onGetUButtonClick(View view) {
         db.retrieveUser(USER_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -113,7 +113,7 @@ public class DemoActivity extends AppCompatActivity {
         });
     }
 
-    public void onGetCButtonClick(View view){
+    public void onGetCButtonClick(View view) {
         db.retrieveCourse(COURSE_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -129,7 +129,7 @@ public class DemoActivity extends AppCompatActivity {
         });
     }
 
-    public void onGetQButtonClick(View view){
+    public void onGetQButtonClick(View view) {
         db.retrieveQuestion(COURSE_KEY, QUESTION_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -144,7 +144,7 @@ public class DemoActivity extends AppCompatActivity {
         });
     }
 
-    public void onGetAButtonClick(View view){
+    public void onGetAButtonClick(View view) {
         db.retrieveAnswer(QUESTION_KEY, ANSWER_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -159,8 +159,22 @@ public class DemoActivity extends AppCompatActivity {
         });
     }
 
-    public void onInternetButtonClick(View view){
+    public void onInternetButtonClick(View view) {
         if (app.isConnected()) Log.d(TAG, "onInternetButtonClick: Connected");
         else Log.d(TAG, "onInternetButtonClick: Disconnected");
+    }
+
+    public void onSubsButtonClick(View view) {
+        if (!app.isConnected()) {
+            Toast.makeText(this, R.string.toast_disconnected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        db.subscribeUser(USER_KEY, COURSE_KEY).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(DemoActivity.this, R.string.toast_subscribe, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
