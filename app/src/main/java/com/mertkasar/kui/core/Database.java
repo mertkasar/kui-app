@@ -9,6 +9,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.mertkasar.kui.models.Answer;
 import com.mertkasar.kui.models.Course;
@@ -26,10 +27,10 @@ public final class Database {
 
     private FirebaseDatabase firebaseDB;
 
-    public DatabaseReference refUsers;
-    public DatabaseReference refCourses;
-    public DatabaseReference refQuestions;
-    public DatabaseReference refAnswers;
+    private DatabaseReference refUsers;
+    private DatabaseReference refCourses;
+    private DatabaseReference refQuestions;
+    private DatabaseReference refAnswers;
 
     private Database() {
         firebaseDB = FirebaseDatabase.getInstance();
@@ -43,15 +44,23 @@ public final class Database {
         Log.d(TAG, "Database: Created");
     }
 
-    public Task<Void> createNewUser(final String uid, final User user) {
+    public Task<Void> createUser(final String uid, final User user) {
         return refUsers.child(uid).setValue(user);
     }
 
-    public Task<Void> createNewCourse(final Course course) {
+    public DatabaseReference retrieveUser(String key){
+        return refUsers.child(key);
+    }
+
+    public Task<Void> createCourse(final Course course) {
         return refCourses.push().setValue(course);
     }
 
-    public Task<Void> createNewQuestion(final String courseKey, final Question question) {
+    public DatabaseReference retrieveCourse(String key){
+        return refCourses.child(key);
+    }
+
+    public Task<Void> createQuestion(final String courseKey, final Question question) {
         Task<Void> task = refQuestions.child(courseKey).push().setValue(question);
 
         // Update corresponding question stats upon success
@@ -88,7 +97,11 @@ public final class Database {
         return task;
     }
 
-    public Task<Void> createNewAnswer(final String courseKey, final String questionKey, final Answer answer) {
+    public DatabaseReference retrieveQuestion(String courseKey, String questionKey){
+        return refQuestions.child(courseKey).child(questionKey);
+    }
+
+    public Task<Void> createAnswer(final String courseKey, final String questionKey, final Answer answer) {
         Task<Void> task = refAnswers.child(questionKey).push().setValue(answer);
 
         // Update corresponding question stats upon success
@@ -123,5 +136,9 @@ public final class Database {
         });
 
         return task;
+    }
+
+    public DatabaseReference retrieveAnswer(String questionKey, String answerKey){
+        return refAnswers.child(questionKey).child(answerKey);
     }
 }

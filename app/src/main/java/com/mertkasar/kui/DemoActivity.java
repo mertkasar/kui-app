@@ -25,6 +25,7 @@ public class DemoActivity extends AppCompatActivity {
     private final String USER_KEY = "-AbC68u";
     private final String COURSE_KEY = "-KXfg48qX_zPZrn9gdC5";
     private final String QUESTION_KEY = "-KXgEJNNTrZPXawBquDf";
+    private final String ANSWER_KEY = "-KXgEVSmdr4wPUel2lHv";
 
     private Database db;
 
@@ -34,39 +35,11 @@ public class DemoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_demo);
 
         db = Database.getInstance();
-
-        db.refCourses.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Course course = dataSnapshot.getValue(Course.class);
-                Log.d(TAG, "onChildAdded: " + course.getEnrollKey());
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     public void onCreateUButtonClick(View view) {
-        User newUser = new User("Mert Kasar", "mertkasar93@gmail.com", User.Type.STUDENT);
-        db.createNewUser(USER_KEY, newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+        User newUser = new User("Mert Kasar", "mertkasar93@gmail.com");
+        db.createUser(USER_KEY, newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(DemoActivity.this, R.string.toast_create_user, Toast.LENGTH_SHORT).show();
@@ -75,8 +48,8 @@ public class DemoActivity extends AppCompatActivity {
     }
 
     public void onPostCButtonClick(View view) {
-        Course newCourse = new Course("MATH103", "Discrete Mathematics");
-        db.createNewCourse(newCourse).addOnSuccessListener(new OnSuccessListener<Void>() {
+        Course newCourse = new Course("MATH103", "Discrete Mathematics", USER_KEY);
+        db.createCourse(newCourse).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(DemoActivity.this, R.string.toast_create_course, Toast.LENGTH_SHORT).show();
@@ -92,7 +65,7 @@ public class DemoActivity extends AppCompatActivity {
         options.put("option_3", "6");
         final Question newQuestion = new Question("Fibonacci?", "What is the next number in the following sequence: 1 1 2 3 5 8 ?", options);
 
-        db.createNewQuestion(COURSE_KEY, newQuestion).addOnSuccessListener(new OnSuccessListener<Void>() {
+        db.createQuestion(COURSE_KEY, newQuestion).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(DemoActivity.this, R.string.toast_create_question, Toast.LENGTH_SHORT).show();
@@ -103,11 +76,72 @@ public class DemoActivity extends AppCompatActivity {
     public void onPostAButtonClick(View view) {
         final Answer newAnswer = new Answer("option_0");
 
-        db.createNewAnswer(COURSE_KEY, QUESTION_KEY, newAnswer).addOnSuccessListener(new OnSuccessListener<Void>() {
+        db.createAnswer(COURSE_KEY, QUESTION_KEY, newAnswer).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 String status = newAnswer.is_correct ? "correct" : "false";
                 Toast.makeText(DemoActivity.this, "Your answer was " + status, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void onGetUButtonClick(View view){
+        db.retrieveUser(USER_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                Log.d(TAG, dataSnapshot.toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void onGetCButtonClick(View view){
+        db.retrieveCourse(COURSE_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Course course = dataSnapshot.getValue(Course.class);
+                Log.d(TAG, dataSnapshot.toString());
+                Log.d(TAG, "enroll_key: " + course.getEnrollKey());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void onGetQButtonClick(View view){
+        db.retrieveQuestion(COURSE_KEY, QUESTION_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Question question = dataSnapshot.getValue(Question.class);
+                Log.d(TAG, dataSnapshot.toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void onGetAButtonClick(View view){
+        db.retrieveAnswer(QUESTION_KEY, ANSWER_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Answer answer = dataSnapshot.getValue(Answer.class);
+                Log.d(TAG, dataSnapshot.toString());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }
