@@ -81,4 +81,13 @@
         android:layout_alignParentEnd="true"
         android:onClick="onGetUButtonClick"
         android:text="GETU" />
+
+    <Button
+        android:id="@+id/button9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:onClick="onInternetButtonClick"
+        android:text="NET" />
 </RelativeLayout>

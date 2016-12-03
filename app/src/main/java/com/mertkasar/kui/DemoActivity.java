@@ -11,6 +11,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.mertkasar.kui.core.App;
 import com.mertkasar.kui.core.Database;
 import com.mertkasar.kui.models.Answer;
 import com.mertkasar.kui.models.Course;
@@ -27,6 +28,7 @@ public class DemoActivity extends AppCompatActivity {
     private final String QUESTION_KEY = "-KXgEJNNTrZPXawBquDf";
     private final String ANSWER_KEY = "-KXgEVSmdr4wPUel2lHv";
 
+    private App app;
     private Database db;
 
     @Override
@@ -34,6 +36,7 @@ public class DemoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demo);
 
+        app = App.getInstance();
         db = Database.getInstance();
     }
 
@@ -58,6 +61,11 @@ public class DemoActivity extends AppCompatActivity {
     }
 
     public void onPostQButtonClick(View view) {
+        if (!app.isConnected()){
+            Toast.makeText(this, R.string.toast_disconnected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         HashMap<String, String> options = new HashMap<>();
         options.put("option_0", "13");
         options.put("option_1", "9");
@@ -74,6 +82,11 @@ public class DemoActivity extends AppCompatActivity {
     }
 
     public void onPostAButtonClick(View view) {
+        if (!app.isConnected()){
+            Toast.makeText(this, R.string.toast_disconnected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         final Answer newAnswer = new Answer("option_0");
 
         db.createAnswer(COURSE_KEY, QUESTION_KEY, newAnswer).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -144,5 +157,10 @@ public class DemoActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void onInternetButtonClick(View view){
+        if (app.isConnected()) Log.d(TAG, "onInternetButtonClick: Connected");
+        else Log.d(TAG, "onInternetButtonClick: Disconnected");
     }
 }

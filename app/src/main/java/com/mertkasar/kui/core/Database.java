@@ -48,7 +48,7 @@ public final class Database {
         return refUsers.child(uid).setValue(user);
     }
 
-    public DatabaseReference retrieveUser(String key){
+    public DatabaseReference retrieveUser(String key) {
         return refUsers.child(key);
     }
 
@@ -56,7 +56,7 @@ public final class Database {
         return refCourses.push().setValue(course);
     }
 
-    public DatabaseReference retrieveCourse(String key){
+    public DatabaseReference retrieveCourse(String key) {
         return refCourses.child(key);
     }
 
@@ -97,7 +97,7 @@ public final class Database {
         return task;
     }
 
-    public DatabaseReference retrieveQuestion(String courseKey, String questionKey){
+    public DatabaseReference retrieveQuestion(String courseKey, String questionKey) {
         return refQuestions.child(courseKey).child(questionKey);
     }
 
@@ -138,7 +138,7 @@ public final class Database {
         return task;
     }
 
-    public DatabaseReference retrieveAnswer(String questionKey, String answerKey){
+    public DatabaseReference retrieveAnswer(String questionKey, String answerKey) {
         return refAnswers.child(questionKey).child(answerKey);
     }
 }
