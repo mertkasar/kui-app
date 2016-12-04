@@ -11,13 +11,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 import com.mertkasar.kui.models.Answer;
 import com.mertkasar.kui.models.Course;
 import com.mertkasar.kui.models.Question;
 import com.mertkasar.kui.models.User;
 
 public final class Database {
-    private final String TAG = Database.class.getSimpleName();
+    public static final String TAG = Database.class.getSimpleName();
 
     private static Database instance = new Database();
 
@@ -99,6 +100,15 @@ public final class Database {
 
     public DatabaseReference retrieveCourse(String key) {
         return refCourses.child(key);
+    }
+
+    public DatabaseReference getCourses() {
+        return refCourses;
+    }
+
+    public Query getCourseBySubsKey(final String key) {
+        Long createdAt = Long.valueOf(key.toLowerCase(), 36);
+        return getCourses().orderByChild("created_at").equalTo(createdAt);
     }
 
     public Task<Void> createQuestion(final String courseKey, final Question question) {

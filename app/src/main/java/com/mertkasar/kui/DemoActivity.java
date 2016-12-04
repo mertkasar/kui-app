@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -21,12 +20,13 @@ import com.mertkasar.kui.models.User;
 import java.util.HashMap;
 
 public class DemoActivity extends AppCompatActivity {
-    private final String TAG = DemoActivity.class.getSimpleName();
+    public static final String TAG = DemoActivity.class.getSimpleName();
 
     private final String USER_KEY = "-AbC68u";
-    private final String COURSE_KEY = "-KY60lbBXU9CjugrEnn5";
+    private final String COURSE_KEY = "-KXnQSLZg0C-9iOxyq9l";
     private final String QUESTION_KEY = "-KXgEJNNTrZPXawBquDf";
     private final String ANSWER_KEY = "-KXgEVSmdr4wPUel2lHv";
+    private final String SUBS_KEY = "iw4F0j6P";
 
     private App app;
     private Database db;
@@ -119,7 +119,7 @@ public class DemoActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Course course = dataSnapshot.getValue(Course.class);
                 Log.d(TAG, dataSnapshot.toString());
-                Log.d(TAG, "enroll_key: " + course.getEnrollKey());
+                Log.d(TAG, "subs_key: " + course.getSubsKey());
             }
 
             @Override
@@ -174,6 +174,41 @@ public class DemoActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(DemoActivity.this, R.string.toast_subscribe, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void onKSubsButtonClick(View view) {
+        if (!app.isConnected()) {
+            Toast.makeText(this, R.string.toast_disconnected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        db.getCourseBySubsKey(SUBS_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    Toast.makeText(DemoActivity.this, R.string.toast_wrong_subscription_key, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (dataSnapshot.getChildrenCount() != 1){
+                    Log.e(Database.TAG, "Failed to subscribe: Multiple subscription key " + SUBS_KEY);
+                    return;
+                }
+
+                DataSnapshot course = dataSnapshot.getChildren().iterator().next();
+                db.subscribeUser(USER_KEY, course.getKey()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(DemoActivity.this, R.string.toast_subscribe, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

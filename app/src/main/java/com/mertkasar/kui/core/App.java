@@ -6,7 +6,7 @@ import android.net.ConnectivityManager;
 import android.util.Log;
 
 public class App extends Application {
-    private final String TAG = App.class.getSimpleName();
+    public static final String TAG = App.class.getSimpleName();
 
     public static App instance;
 

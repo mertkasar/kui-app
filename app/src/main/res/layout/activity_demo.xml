@@ -92,11 +92,19 @@
         android:text="NET" />
 
     <Button
+        android:id="@+id/button11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/button10"
+        android:layout_below="@+id/button9"
+        android:onClick="onKSubsButtonClick"
+        android:text="KSUBS" />
+
+    <Button
         android:id="@+id/button10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button9"
-        android:layout_alignBottom="@+id/button9"
+        android:layout_above="@+id/button9"
         android:layout_alignParentEnd="true"
         android:onClick="onSubsButtonClick"
         android:text="SUBS" />

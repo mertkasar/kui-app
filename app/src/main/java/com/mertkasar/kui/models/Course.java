@@ -29,7 +29,7 @@ public class Course {
     }
 
     @Exclude
-    public String getEnrollKey() {
+    public String getSubsKey() {
         if (!(created_at instanceof Long))
             return null;
 
