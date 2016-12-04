@@ -111,6 +111,10 @@ public final class Database {
         return getCourses().orderByChild("created_at").equalTo(createdAt);
     }
 
+    public Query getSubscribedCourse(final String userKey, final String courseKey){
+        return refSubscriptions.child(userKey).child(courseKey);
+    }
+
     public Task<Void> createQuestion(final String courseKey, final Question question) {
         Task<Void> task = refQuestions.child(courseKey).push().setValue(question);
 

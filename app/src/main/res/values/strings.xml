@@ -3,7 +3,8 @@
     <string name="toast_create_course">Course created</string>
     <string name="toast_create_question">Posted successfully.</string>
     <string name="toast_create_user">User created</string>
-    <string name="toast_disconnected">Connection error</string>
+    <string name="toast_not_connected">Connection error</string>
     <string name="toast_subscribe">You subscribed</string>
     <string name="toast_wrong_subscription_key">Wrong subscrition key</string>
+    <string name="toast_already_subscribed">You already subscribed to this course</string>
 </resources>

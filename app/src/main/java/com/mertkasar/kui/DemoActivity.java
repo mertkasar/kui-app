@@ -62,7 +62,7 @@ public class DemoActivity extends AppCompatActivity {
 
     public void onPostQButtonClick(View view) {
         if (!app.isConnected()) {
-            Toast.makeText(this, R.string.toast_disconnected, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_not_connected, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -83,7 +83,7 @@ public class DemoActivity extends AppCompatActivity {
 
     public void onPostAButtonClick(View view) {
         if (!app.isConnected()) {
-            Toast.makeText(this, R.string.toast_disconnected, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_not_connected, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -166,21 +166,36 @@ public class DemoActivity extends AppCompatActivity {
 
     public void onSubsButtonClick(View view) {
         if (!app.isConnected()) {
-            Toast.makeText(this, R.string.toast_disconnected, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_not_connected, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        db.subscribeUser(USER_KEY, COURSE_KEY).addOnSuccessListener(new OnSuccessListener<Void>() {
+        db.getSubscribedCourse(USER_KEY, COURSE_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(DemoActivity.this, R.string.toast_subscribe, Toast.LENGTH_SHORT).show();
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Toast.makeText(DemoActivity.this, R.string.toast_already_subscribed, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                db.subscribeUser(USER_KEY, COURSE_KEY).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(DemoActivity.this, R.string.toast_subscribe, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }
 
     public void onKSubsButtonClick(View view) {
         if (!app.isConnected()) {
-            Toast.makeText(this, R.string.toast_disconnected, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_not_connected, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -192,16 +207,33 @@ public class DemoActivity extends AppCompatActivity {
                     return;
                 }
 
-                if (dataSnapshot.getChildrenCount() != 1){
+                if (dataSnapshot.getChildrenCount() != 1) {
                     Log.e(Database.TAG, "Failed to subscribe: Multiple subscription key " + SUBS_KEY);
                     return;
                 }
 
-                DataSnapshot course = dataSnapshot.getChildren().iterator().next();
-                db.subscribeUser(USER_KEY, course.getKey()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                DataSnapshot courseSnapshot = dataSnapshot.getChildren().iterator().next();
+                final String courseKey = courseSnapshot.getKey();
+
+                db.getSubscribedCourse(USER_KEY, courseKey).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(DemoActivity.this, R.string.toast_subscribe, Toast.LENGTH_SHORT).show();
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            Toast.makeText(DemoActivity.this, R.string.toast_already_subscribed, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        db.subscribeUser(USER_KEY, courseKey).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(DemoActivity.this, R.string.toast_subscribe, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
                     }
                 });
             }
