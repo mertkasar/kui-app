@@ -7,4 +7,5 @@
     <string name="toast_subscribe">You subscribed</string>
     <string name="toast_wrong_subscription_key">Wrong subscrition key</string>
     <string name="toast_already_subscribed">You already subscribed to this course</string>
+    <string name="toast_unsubscribed">You unsubscribed</string>
 </resources>

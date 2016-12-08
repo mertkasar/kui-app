@@ -23,10 +23,10 @@ public class DemoActivity extends AppCompatActivity {
     public static final String TAG = DemoActivity.class.getSimpleName();
 
     private final String USER_KEY = "-AbC68u";
-    private final String COURSE_KEY = "-KXnQSLZg0C-9iOxyq9l";
-    private final String QUESTION_KEY = "-KXgEJNNTrZPXawBquDf";
-    private final String ANSWER_KEY = "-KXgEVSmdr4wPUel2lHv";
-    private final String SUBS_KEY = "iw4F0j6P";
+    private final String COURSE_KEY = "-KYQFLU24sjQCsgYptzw";
+    private final String QUESTION_KEY = "";
+    private final String ANSWER_KEY = "";
+    private final String SUBS_KEY = "IWFGU7UR";
 
     private App app;
     private Database db;
@@ -241,6 +241,20 @@ public class DemoActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+    }
+
+    public void onUnsubsButtonClick(View view){
+        if (!app.isConnected()) {
+            Toast.makeText(DemoActivity.this, R.string.toast_not_connected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        db.unsubscribeUser(USER_KEY, COURSE_KEY).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(DemoActivity.this, R.string.toast_unsubscribed, Toast.LENGTH_SHORT).show();
             }
         });
     }

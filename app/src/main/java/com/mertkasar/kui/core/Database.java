@@ -17,6 +17,9 @@ import com.mertkasar.kui.models.Course;
 import com.mertkasar.kui.models.Question;
 import com.mertkasar.kui.models.User;
 
+import java.util.HashMap;
+import java.util.Objects;
+
 public final class Database {
     public static final String TAG = Database.class.getSimpleName();
 
@@ -28,23 +31,29 @@ public final class Database {
 
     private FirebaseDatabase firebaseDB;
 
+    private DatabaseReference refDB;
+
     private DatabaseReference refUsers;
     private DatabaseReference refCourses;
     private DatabaseReference refQuestions;
     private DatabaseReference refAnswers;
+
     private DatabaseReference refSubscriptions;
     private DatabaseReference refSubscribers;
 
     private Database() {
         firebaseDB = FirebaseDatabase.getInstance();
-        firebaseDB.setPersistenceEnabled(true);
+        //firebaseDB.setPersistenceEnabled(true);
+
+        refDB = firebaseDB.getReference();
 
         refUsers = firebaseDB.getReference("users");
         refCourses = firebaseDB.getReference("courses");
         refQuestions = firebaseDB.getReference("questions");
         refAnswers = firebaseDB.getReference("answers");
-        refSubscriptions = firebaseDB.getReference("subscriptions");
-        refSubscribers = firebaseDB.getReference("subscribers");
+
+        refSubscriptions = firebaseDB.getReference("user_subscriptions");
+        refSubscribers = firebaseDB.getReference("course_subscribers");
 
         Log.d(TAG, "Database: Created");
     }
@@ -58,13 +67,15 @@ public final class Database {
     }
 
     public Task<Void> subscribeUser(final String userKey, final String courseKey) {
-        Task<Void> task = refSubscriptions.child(userKey).child(courseKey).setValue(true);
+        HashMap<String, Object> updateBatch = new HashMap<>();
 
+        updateBatch.put("user_subscriptions/" + userKey + "/" + courseKey, true);
+        updateBatch.put("course_subscribers/" + courseKey + "/" + userKey, true);
+
+        Task<Void> task = refDB.updateChildren(updateBatch);
         task.addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                refSubscribers.child(courseKey).child(userKey).setValue(true);
-
                 refCourses.child(courseKey).runTransaction(new Transaction.Handler() {
                     @Override
                     public Transaction.Result doTransaction(MutableData mutableData) {
@@ -77,6 +88,45 @@ public final class Database {
 
                         //Update stats
                         course.subscriber_count = course.subscriber_count + 1;
+
+                        //Finish transaction and report success
+                        mutableData.setValue(course);
+                        return Transaction.success(mutableData);
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+
+                    }
+                });
+            }
+        });
+
+        return task;
+    }
+
+    public Task<Void> unsubscribeUser(final String userKey, final String courseKey) {
+        HashMap<String, Object> updateBatch = new HashMap<>();
+
+        updateBatch.put("user_subscriptions/" + userKey + "/" + courseKey, null);
+        updateBatch.put("course_subscribers/" + courseKey + "/" + userKey, null);
+
+        Task<Void> task = refDB.updateChildren(updateBatch);
+        task.addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                refCourses.child(courseKey).runTransaction(new Transaction.Handler() {
+                    @Override
+                    public Transaction.Result doTransaction(MutableData mutableData) {
+                        //Retrieve the course
+                        Course course = mutableData.getValue(Course.class);
+                        if (course == null) {
+                            Log.d(TAG, "doTransaction: Cant find the course");
+                            return Transaction.success(mutableData);
+                        }
+
+                        //Update stats
+                        course.subscriber_count = course.subscriber_count - 1;
 
                         //Finish transaction and report success
                         mutableData.setValue(course);
