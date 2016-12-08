@@ -62,8 +62,16 @@ public final class Database {
         return refUsers.child(uid).setValue(user);
     }
 
-    public DatabaseReference retrieveUser(final String key) {
+    public DatabaseReference getUserByKey(final String key) {
         return refUsers.child(key);
+    }
+
+    public DatabaseReference getUserCoursesByKey(final String key) {
+        return refUserCourses.child(key);
+    }
+
+    public DatabaseReference getUserSubsByKey(final String key) {
+        return refUserSubscriptions.child(key);
     }
 
     public Task<Void> subscribeUser(final String userKey, final String courseKey) {
@@ -155,17 +163,13 @@ public final class Database {
         return refDB.updateChildren(updateBatch);
     }
 
-    public DatabaseReference retrieveCourse(String key) {
+    public DatabaseReference getCourseByKey(String key) {
         return refCourses.child(key);
-    }
-
-    public DatabaseReference getCourses() {
-        return refCourses;
     }
 
     public Query getCourseBySubsKey(final String key) {
         Long createdAt = Long.valueOf(key.toLowerCase(), 36);
-        return getCourses().orderByChild("created_at").equalTo(createdAt);
+        return refCourses.orderByChild("created_at").equalTo(createdAt);
     }
 
     public Query getSubscribedCourse(final String userKey, final String courseKey) {
@@ -209,7 +213,7 @@ public final class Database {
         return task;
     }
 
-    public DatabaseReference retrieveQuestion(String courseKey, String questionKey) {
+    public DatabaseReference getQuestionByKey(String courseKey, String questionKey) {
         return refQuestions.child(courseKey).child(questionKey);
     }
 
@@ -250,7 +254,7 @@ public final class Database {
         return task;
     }
 
-    public DatabaseReference retrieveAnswer(String questionKey, String answerKey) {
+    public DatabaseReference getAnswerByKey(String questionKey, String answerKey) {
         return refAnswers.child(questionKey).child(answerKey);
     }
 }

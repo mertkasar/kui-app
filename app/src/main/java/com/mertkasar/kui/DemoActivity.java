@@ -22,7 +22,7 @@ import java.util.HashMap;
 public class DemoActivity extends AppCompatActivity {
     public static final String TAG = DemoActivity.class.getSimpleName();
 
-    private final String USER_KEY = "-T68ucHg";
+    private final String USER_KEY = "-AbC68u";
     private final String COURSE_KEY = "-KYQFLU24sjQCsgYptzw";
     private final String QUESTION_KEY = "";
     private final String ANSWER_KEY = "";
@@ -99,7 +99,7 @@ public class DemoActivity extends AppCompatActivity {
     }
 
     public void onGetUButtonClick(View view) {
-        db.retrieveUser(USER_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
+        db.getUserByKey(USER_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -114,7 +114,7 @@ public class DemoActivity extends AppCompatActivity {
     }
 
     public void onGetCButtonClick(View view) {
-        db.retrieveCourse(COURSE_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
+        db.getCourseByKey(COURSE_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Course course = dataSnapshot.getValue(Course.class);
@@ -130,7 +130,7 @@ public class DemoActivity extends AppCompatActivity {
     }
 
     public void onGetQButtonClick(View view) {
-        db.retrieveQuestion(COURSE_KEY, QUESTION_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
+        db.getQuestionByKey(COURSE_KEY, QUESTION_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Question question = dataSnapshot.getValue(Question.class);
@@ -145,7 +145,7 @@ public class DemoActivity extends AppCompatActivity {
     }
 
     public void onGetAButtonClick(View view) {
-        db.retrieveAnswer(QUESTION_KEY, ANSWER_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
+        db.getAnswerByKey(QUESTION_KEY, ANSWER_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Answer answer = dataSnapshot.getValue(Answer.class);
@@ -245,7 +245,7 @@ public class DemoActivity extends AppCompatActivity {
         });
     }
 
-    public void onUnsubsButtonClick(View view){
+    public void onUnsubsButtonClick(View view) {
         if (!app.isConnected()) {
             Toast.makeText(DemoActivity.this, R.string.toast_not_connected, Toast.LENGTH_SHORT).show();
             return;
@@ -255,6 +255,58 @@ public class DemoActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(DemoActivity.this, R.string.toast_unsubscribed, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void onUCButtonClick(View view) {
+        db.getUserCoursesByKey(USER_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    db.getCourseByKey(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Log.d(TAG, dataSnapshot.toString());
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void onUSubButtonClick(View view) {
+        db.getUserSubsByKey(USER_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    db.getCourseByKey(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Log.d(TAG, dataSnapshot.toString());
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

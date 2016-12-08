@@ -118,4 +118,22 @@
         android:layout_below="@+id/button11"
         android:onClick="onUnsubsButtonClick"
         android:text="UNSUBS" />
+
+    <Button
+        android:id="@+id/button15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button9"
+        android:layout_alignParentStart="true"
+        android:onClick="onUCButtonClick"
+        android:text="GETUC" />
+
+    <Button
+        android:id="@+id/button16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/button15"
+        android:layout_below="@+id/button15"
+        android:onClick="onUSubButtonClick"
+        android:text="GETUSUB" />
 </RelativeLayout>
