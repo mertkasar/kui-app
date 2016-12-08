@@ -11,14 +11,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
-import com.google.firebase.database.ValueEventListener;
 import com.mertkasar.kui.models.Answer;
 import com.mertkasar.kui.models.Course;
 import com.mertkasar.kui.models.Question;
 import com.mertkasar.kui.models.User;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 public final class Database {
     public static final String TAG = Database.class.getSimpleName();
@@ -38,8 +36,9 @@ public final class Database {
     private DatabaseReference refQuestions;
     private DatabaseReference refAnswers;
 
-    private DatabaseReference refSubscriptions;
-    private DatabaseReference refSubscribers;
+    private DatabaseReference refUserCourses;
+    private DatabaseReference refUserSubscriptions;
+    private DatabaseReference refCourseSubscribers;
 
     private Database() {
         firebaseDB = FirebaseDatabase.getInstance();
@@ -52,8 +51,9 @@ public final class Database {
         refQuestions = firebaseDB.getReference("questions");
         refAnswers = firebaseDB.getReference("answers");
 
-        refSubscriptions = firebaseDB.getReference("user_subscriptions");
-        refSubscribers = firebaseDB.getReference("course_subscribers");
+        refUserCourses = firebaseDB.getReference("user_courses");
+        refUserSubscriptions = firebaseDB.getReference("user_subscriptions");
+        refCourseSubscribers = firebaseDB.getReference("course_subscribers");
 
         Log.d(TAG, "Database: Created");
     }
@@ -145,7 +145,14 @@ public final class Database {
     }
 
     public Task<Void> createCourse(final Course course) {
-        return refCourses.push().setValue(course);
+        String courseKey = refCourses.push().getKey();
+
+        HashMap<String, Object> updateBatch = new HashMap<>();
+
+        updateBatch.put("courses/" + courseKey, course);
+        updateBatch.put("user_courses/" + course.owner + "/" + courseKey, true);
+
+        return refDB.updateChildren(updateBatch);
     }
 
     public DatabaseReference retrieveCourse(String key) {
@@ -161,8 +168,8 @@ public final class Database {
         return getCourses().orderByChild("created_at").equalTo(createdAt);
     }
 
-    public Query getSubscribedCourse(final String userKey, final String courseKey){
-        return refSubscriptions.child(userKey).child(courseKey);
+    public Query getSubscribedCourse(final String userKey, final String courseKey) {
+        return refUserSubscriptions.child(userKey).child(courseKey);
     }
 
     public Task<Void> createQuestion(final String courseKey, final Question question) {

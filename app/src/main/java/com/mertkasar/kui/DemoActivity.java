@@ -22,7 +22,7 @@ import java.util.HashMap;
 public class DemoActivity extends AppCompatActivity {
     public static final String TAG = DemoActivity.class.getSimpleName();
 
-    private final String USER_KEY = "-AbC68u";
+    private final String USER_KEY = "-T68ucHg";
     private final String COURSE_KEY = "-KYQFLU24sjQCsgYptzw";
     private final String QUESTION_KEY = "";
     private final String ANSWER_KEY = "";
