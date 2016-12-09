@@ -1,5 +1,7 @@
 package com.mertkasar.kui.models;
 
+import android.os.Parcelable;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.ServerValue;
 

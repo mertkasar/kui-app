@@ -14,7 +14,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.mertkasar.kui.core.App;
 import com.mertkasar.kui.core.Database;
 import com.mertkasar.kui.models.Answer;
-import com.mertkasar.kui.models.Course;
 import com.mertkasar.kui.models.Question;
 import com.mertkasar.kui.models.User;
 
@@ -67,7 +66,7 @@ public class DemoActivity extends AppCompatActivity {
 
     public void onPostCButtonClick(View view) {
         Intent newPostIntent = new Intent(this, NewCourseActivity.class);
-        newPostIntent.putExtra("USER_KEY", USER_KEY);
+        newPostIntent.putExtra("EXTRA_USER_KEY", USER_KEY);
         startActivityForResult(newPostIntent, RC_NEW_POST);
     }
 
@@ -125,19 +124,9 @@ public class DemoActivity extends AppCompatActivity {
     }
 
     public void onGetCButtonClick(View view) {
-        db.getCourseByKey(COURSE_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Course course = dataSnapshot.getValue(Course.class);
-                Log.d(TAG, dataSnapshot.toString());
-                Log.d(TAG, "subs_key: " + course.getSubsKey());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        Intent newPostIntent = new Intent(this, CourseDetailActivity.class);
+        newPostIntent.putExtra("EXTRA_COURSE_KEY", COURSE_KEY);
+        startActivity(newPostIntent);
     }
 
     public void onGetQButtonClick(View view) {

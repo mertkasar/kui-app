@@ -18,7 +18,7 @@ import com.mertkasar.kui.models.Course;
 public class NewCourseActivity extends AppCompatActivity {
     public static final String TAG = NewCourseActivity.class.getSimpleName();
 
-    private String USER_KEY;
+    private String userKey;
 
     private TextView title;
     private TextView description;
@@ -29,7 +29,11 @@ public class NewCourseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_course);
 
-        USER_KEY = getIntent().getStringExtra("USER_KEY");
+        userKey = getIntent().getStringExtra("EXTRA_USER_KEY");
+        if (userKey == null) {
+            throw new IllegalArgumentException("Must pass EXTRA_USER_KEY");
+        }
+
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -64,7 +68,7 @@ public class NewCourseActivity extends AppCompatActivity {
     }
 
     private void createNewCourse() {
-        Course newCourse = new Course(USER_KEY, title.getText().toString(), description.getText().toString(), publicSwitch.isChecked());
+        Course newCourse = new Course(userKey, title.getText().toString(), description.getText().toString(), publicSwitch.isChecked());
 
         Database.getInstance().createCourse(newCourse).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
