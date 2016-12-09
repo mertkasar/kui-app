@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.mertkasar.kui.core.Database;
 import com.mertkasar.kui.models.Course;
+import com.mertkasar.kui.models.User;
 
 public class CourseDetailActivity extends AppCompatActivity {
     public static final String TAG = CourseDetailActivity.class.getSimpleName();
@@ -23,6 +25,9 @@ public class CourseDetailActivity extends AppCompatActivity {
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private TextView mDescriptionTextView;
     private TextView mSubtitleTextView;
+    private TextView mOwnerTitleTextView;
+    private TextView mQuestionCountTextView;
+    private TextView mSubscriberCountTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,12 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDefaultDisplayHomeAsUpEnabled(true);
+        }
 
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
 
@@ -41,6 +52,9 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         mDescriptionTextView = (TextView) findViewById(R.id.description);
         mSubtitleTextView = (TextView) findViewById(R.id.toolbar_subtitle);
+        mOwnerTitleTextView = (TextView) findViewById(R.id.text_course_detail_owner);
+        mQuestionCountTextView = (TextView) findViewById(R.id.text_course_detail_question_count);
+        mSubscriberCountTextView = (TextView) findViewById(R.id.text_course_detail_subscriber_count);
 
         getCourse();
 
@@ -69,9 +83,26 @@ public class CourseDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void bindLayout(Course course){
+    private void bindLayout(Course course) {
+        mCollapsingToolbarLayout.setTitleEnabled(true);
         mCollapsingToolbarLayout.setTitle(course.title);
+
         mDescriptionTextView.setText(course.description);
         mSubtitleTextView.setText("Enroll code: " + course.getSubsKey());
+        mQuestionCountTextView.setText(course.question_count.toString());
+        mSubscriberCountTextView.setText(course.subscriber_count.toString());
+
+        Database.getInstance().getUserByKey(course.owner).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                mOwnerTitleTextView.setText(user.name);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

@@ -20,6 +20,7 @@
         </activity>
         <activity
             android:name=".NewCourseActivity"
+            android:label="@string/title_activity_new_course"
             android:parentActivityName=".DemoActivity" />
 
         <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -27,7 +28,8 @@
         <activity
             android:name=".CourseDetailActivity"
             android:label="@string/title_activity_course_detail"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:parentActivityName=".DemoActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

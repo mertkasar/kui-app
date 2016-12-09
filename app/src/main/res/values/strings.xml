@@ -19,9 +19,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-    <string name="activity_title_new_course">New Course</string>
+    <string name="title_activity_new_course">New Course</string>
     <string name="toast_create_course_failure">Can\'t create a new course</string>
     <string name="menu_item_send">Send</string>
-    <string name="title_activity_course_detail">CourseDetailActivity</string>
+    <string name="title_activity_course_detail">&lt;course-title&gt;</string>
     <string name="text_course_detail_toolbar_subtitle">Enroll code:</string>
 </resources>
