@@ -9,6 +9,7 @@ public class Course {
     public String title;
     public String description;
     public String owner;
+    public Boolean is_public;
 
     public Object created_at;
     public Integer question_count;
@@ -18,10 +19,11 @@ public class Course {
 
     }
 
-    public Course(String title, String description, String owner) {
+    public Course(String owner, String title, String description, boolean isPublic) {
+        this.owner = owner;
         this.title = title;
         this.description = description;
-        this.owner = owner;
+        this.is_public = isPublic;
 
         created_at = ServerValue.TIMESTAMP;
         question_count = 0;

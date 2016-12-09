@@ -9,7 +9,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DemoActivity">
+        <activity
+            android:name=".DemoActivity"
+            android:launchMode="standard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,8 +19,12 @@
             </intent-filter>
         </activity>
 
-        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+        <activity
+            android:name=".NewCourseActivity"
+            android:parentActivityName=".DemoActivity" />
+
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     </application>
 
 </manifest>

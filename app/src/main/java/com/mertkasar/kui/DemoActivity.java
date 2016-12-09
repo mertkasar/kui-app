@@ -1,5 +1,6 @@
 package com.mertkasar.kui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,6 +23,9 @@ import java.util.HashMap;
 public class DemoActivity extends AppCompatActivity {
     public static final String TAG = DemoActivity.class.getSimpleName();
 
+    //Request codes
+    public final int RC_NEW_POST = 1;
+
     private final String USER_KEY = "-AbC68u";
     private final String COURSE_KEY = "-KYQFLU24sjQCsgYptzw";
     private final String QUESTION_KEY = "";
@@ -40,6 +44,17 @@ public class DemoActivity extends AppCompatActivity {
         db = Database.getInstance();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RC_NEW_POST) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, R.string.toast_create_course_success, Toast.LENGTH_SHORT).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, R.string.toast_create_course_failure, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     public void onCreateUButtonClick(View view) {
         User newUser = new User("Mert Kasar", "mertkasar93@gmail.com");
         db.createUser(USER_KEY, newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -51,13 +66,9 @@ public class DemoActivity extends AppCompatActivity {
     }
 
     public void onPostCButtonClick(View view) {
-        Course newCourse = new Course("MATH103", "Discrete Mathematics", USER_KEY);
-        db.createCourse(newCourse).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(DemoActivity.this, R.string.toast_create_course, Toast.LENGTH_SHORT).show();
-            }
-        });
+        Intent newPostIntent = new Intent(this, NewCourseActivity.class);
+        newPostIntent.putExtra("USER_KEY", USER_KEY);
+        startActivityForResult(newPostIntent, RC_NEW_POST);
     }
 
     public void onPostQButtonClick(View view) {
