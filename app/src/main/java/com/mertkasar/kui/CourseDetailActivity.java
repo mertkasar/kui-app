@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,7 +23,9 @@ public class CourseDetailActivity extends AppCompatActivity {
 
     private String mCourseKey;
 
+    private ViewSwitcher mViewSwitcher;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
+
     private TextView mDescriptionTextView;
     private TextView mSubtitleTextView;
     private TextView mOwnerTitleTextView;
@@ -43,6 +46,7 @@ public class CourseDetailActivity extends AppCompatActivity {
             actionBar.setDefaultDisplayHomeAsUpEnabled(true);
         }
 
+        mViewSwitcher = (ViewSwitcher) findViewById(R.id.view_switcher_main);
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
 
         mCourseKey = getIntent().getStringExtra("EXTRA_COURSE_KEY");
@@ -104,5 +108,7 @@ public class CourseDetailActivity extends AppCompatActivity {
 
             }
         });
+
+        mViewSwitcher.showNext();
     }
 }
