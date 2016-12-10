@@ -71,5 +71,11 @@
             android:layout_marginBottom="@dimen/text_margin"
             android:layout_marginTop="@dimen/text_margin"
             android:background="?android:attr/dividerVertical" />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_question_list"
+            />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
