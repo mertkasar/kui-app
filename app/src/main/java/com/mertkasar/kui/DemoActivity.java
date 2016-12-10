@@ -17,13 +17,12 @@ import com.mertkasar.kui.models.Answer;
 import com.mertkasar.kui.models.Question;
 import com.mertkasar.kui.models.User;
 
-import java.util.HashMap;
-
 public class DemoActivity extends AppCompatActivity {
     public static final String TAG = DemoActivity.class.getSimpleName();
 
     //Request codes
-    public final int RC_NEW_POST = 1;
+    public final int RC_NEW_COURSE = 1;
+    public final int RC_NEW_QUESTION = 2;
 
     private final String USER_KEY = "-AbC68u";
     private final String COURSE_KEY = "-KYQFLU24sjQCsgYptzw";
@@ -45,12 +44,23 @@ public class DemoActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == RC_NEW_POST) {
-            if (resultCode == RESULT_OK) {
-                Toast.makeText(this, R.string.toast_create_course_success, Toast.LENGTH_SHORT).show();
-            } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, R.string.toast_create_course_failure, Toast.LENGTH_SHORT).show();
-            }
+        switch (requestCode) {
+            case RC_NEW_COURSE:
+                if (resultCode == RESULT_OK) {
+                    Toast.makeText(this, R.string.toast_create_course_success, Toast.LENGTH_SHORT).show();
+                } else if (resultCode == RESULT_CANCELED) {
+                    Toast.makeText(this, R.string.toast_create_course_failure, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case RC_NEW_QUESTION:
+                if (resultCode == RESULT_OK) {
+                    Toast.makeText(this, R.string.toast_create_question_success, Toast.LENGTH_SHORT).show();
+                } else if (resultCode == RESULT_CANCELED) {
+                    Toast.makeText(this, R.string.toast_create_question_failure, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -67,28 +77,13 @@ public class DemoActivity extends AppCompatActivity {
     public void onPostCButtonClick(View view) {
         Intent newPostIntent = new Intent(this, NewCourseActivity.class);
         newPostIntent.putExtra("EXTRA_USER_KEY", USER_KEY);
-        startActivityForResult(newPostIntent, RC_NEW_POST);
+        startActivityForResult(newPostIntent, RC_NEW_COURSE);
     }
 
     public void onPostQButtonClick(View view) {
-        if (!app.isConnected()) {
-            Toast.makeText(this, R.string.toast_not_connected, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        HashMap<String, String> options = new HashMap<>();
-        options.put("option_0", "13");
-        options.put("option_1", "9");
-        options.put("option_2", "1");
-        options.put("option_3", "6");
-        final Question newQuestion = new Question("Fibonacci?", "What is the next number in the following sequence: 1 1 2 3 5 8 ?", options);
-
-        db.createQuestion(COURSE_KEY, newQuestion).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(DemoActivity.this, R.string.toast_create_question, Toast.LENGTH_SHORT).show();
-            }
-        });
+        Intent newPostIntent = new Intent(this, NewQuestionActivity.class);
+        newPostIntent.putExtra("EXTRA_COURSE_KEY", COURSE_KEY);
+        startActivityForResult(newPostIntent, RC_NEW_QUESTION);
     }
 
     public void onPostAButtonClick(View view) {

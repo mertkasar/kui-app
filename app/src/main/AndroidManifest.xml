@@ -30,6 +30,10 @@
             android:label="@string/title_activity_course_detail"
             android:parentActivityName=".DemoActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".NewQuestionActivity"
+            android:label="@string/title_activity_new_question"
+            android:parentActivityName=".DemoActivity"/>
     </application>
 
 </manifest>

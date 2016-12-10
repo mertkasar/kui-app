@@ -34,7 +34,6 @@ public class NewCourseActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Must pass EXTRA_USER_KEY");
         }
 
-
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_new_question"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:divider="@drawable/divider_horizontal"
+    android:orientation="vertical"
+    android:showDividers="middle"
+    tools:context="com.mertkasar.kui.NewQuestionActivity">
+
+    <EditText
+        android:id="@+id/title_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:background="@android:color/transparent"
+        android:hint="@string/hint_title"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/description_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:background="@android:color/transparent"
+        android:gravity="top"
+        android:hint="@string/hint_description"
+        android:inputType="textMultiLine"
+        android:minLines="4" />
+
+    <EditText
+        android:id="@+id/option_correct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#E8F5E9"
+        android:hint="@string/hint_option_correct"
+        android:inputType="textMultiLine"
+        android:padding="@dimen/text_margin" />
+
+    <EditText
+        android:id="@+id/option_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFEBEE"
+        android:hint="Option 1"
+        android:inputType="textMultiLine"
+        android:padding="@dimen/text_margin" />
+
+    <EditText
+        android:id="@+id/option_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFEBEE"
+        android:hint="Option 2"
+        android:inputType="textMultiLine"
+        android:padding="@dimen/text_margin" />
+
+    <EditText
+        android:id="@+id/option_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFEBEE"
+        android:hint="Option 3"
+        android:inputType="textMultiLine"
+        android:padding="@dimen/text_margin" />
+</LinearLayout>

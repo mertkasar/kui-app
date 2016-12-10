@@ -22,13 +22,7 @@
             android:includeFontPadding="false"
             tools:text="&lt;course-description&gt;" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/text_margin"
-            android:layout_marginTop="@dimen/text_margin"
-            android:background="?android:attr/dividerVertical" />
+        <include layout="@layout/divider" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,13 +58,7 @@
                 tools:text="&lt;count&gt;" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/text_margin"
-            android:layout_marginTop="@dimen/text_margin"
-            android:background="?android:attr/dividerVertical" />
+        <include layout="@layout/divider" />
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
