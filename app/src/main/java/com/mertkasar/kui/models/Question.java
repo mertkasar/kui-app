@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 @IgnoreExtraProperties
 public class Question {
+    public String course;
     public String title;
     public String description;
     public HashMap<String, String> options;
@@ -15,12 +16,13 @@ public class Question {
     public Question() {
     }
 
-    public Question(String title, String description, HashMap<String, String> options) {
+    public Question(String course, String title, String description, HashMap<String, String> options) {
+        this.course = course;
         this.title = title;
         this.description = description;
         this.options = options;
 
-        answer_count  = 0;
+        answer_count = 0;
         correct_count = 0;
     }
 }

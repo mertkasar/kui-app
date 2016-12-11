@@ -81,6 +81,7 @@ public class NewQuestionActivity extends AppCompatActivity {
         options.put("option_3", mOption3.getText().toString());
 
         final Question newQuestion = new Question(
+                mCourseKey,
                 mTitle.getText().toString(),
                 mDescription.getText().toString(),
                 options

@@ -39,6 +39,7 @@ public final class Database {
     private DatabaseReference refUserCourses;
     private DatabaseReference refUserSubscriptions;
     private DatabaseReference refCourseSubscribers;
+    private DatabaseReference refCourseQuestions;
 
     private Database() {
         firebaseDB = FirebaseDatabase.getInstance();
@@ -54,6 +55,7 @@ public final class Database {
         refUserCourses = firebaseDB.getReference("user_courses");
         refUserSubscriptions = firebaseDB.getReference("user_subscriptions");
         refCourseSubscribers = firebaseDB.getReference("course_subscribers");
+        refCourseQuestions = firebaseDB.getReference("course_questions");
 
         Log.d(TAG, "Database: Created");
     }
@@ -177,7 +179,14 @@ public final class Database {
     }
 
     public Task<Void> createQuestion(final String courseKey, final Question question) {
-        Task<Void> task = refQuestions.child(courseKey).push().setValue(question);
+        String questionKey = refQuestions.child(courseKey).push().getKey();
+
+        HashMap<String, Object> updateBatch = new HashMap<>();
+
+        updateBatch.put("questions/" + questionKey, question);
+        updateBatch.put("course_questions/" + courseKey + "/" + questionKey, true);
+
+        Task<Void> task = refDB.updateChildren(updateBatch);
 
         // Update corresponding question stats upon success
         task.addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -215,6 +224,10 @@ public final class Database {
 
     public DatabaseReference getQuestionByKey(String courseKey, String questionKey) {
         return refQuestions.child(courseKey).child(questionKey);
+    }
+
+    public DatabaseReference getQuestionsByCourseKey(final String courseKey) {
+        return refCourseQuestions.child(courseKey);
     }
 
     public Task<Void> createAnswer(final String courseKey, final String questionKey, final Answer answer) {
