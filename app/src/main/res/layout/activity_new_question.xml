@@ -7,7 +7,7 @@
     android:divider="@drawable/divider_horizontal"
     android:orientation="vertical"
     android:showDividers="middle"
-    tools:context="com.mertkasar.kui.NewQuestionActivity">
+    tools:context="com.mertkasar.kui.activities.NewQuestionActivity">
 
     <EditText
         android:id="@+id/title_edit_text"

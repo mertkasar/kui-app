@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".DemoActivity"
+            android:name=".activities.DemoActivity"
             android:launchMode="standard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,21 +19,24 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewCourseActivity"
+            android:name=".activities.NewCourseActivity"
             android:label="@string/title_activity_new_course"
-            android:parentActivityName=".DemoActivity" />
+            android:parentActivityName=".activities.DemoActivity" />
 
         <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
         <activity
-            android:name=".CourseDetailActivity"
+            android:name=".activities.CourseDetailActivity"
             android:label="@string/title_activity_course_detail"
-            android:parentActivityName=".DemoActivity"
+            android:parentActivityName=".activities.DemoActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".NewQuestionActivity"
+            android:name=".activities.NewQuestionActivity"
             android:label="@string/title_activity_new_question"
-            android:parentActivityName=".DemoActivity"/>
+            android:parentActivityName=".activities.DemoActivity" />
+        <activity
+            android:name=".activities.QuizActivity"
+            android:parentActivityName=".activities.DemoActivity" />
     </application>
 
 </manifest>

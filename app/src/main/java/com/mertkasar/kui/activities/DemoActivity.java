@@ -1,4 +1,4 @@
-package com.mertkasar.kui;
+package com.mertkasar.kui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,10 +11,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.mertkasar.kui.R;
 import com.mertkasar.kui.core.App;
 import com.mertkasar.kui.core.Database;
 import com.mertkasar.kui.models.Answer;
-import com.mertkasar.kui.models.Question;
 import com.mertkasar.kui.models.User;
 
 public class DemoActivity extends AppCompatActivity {
@@ -26,7 +26,7 @@ public class DemoActivity extends AppCompatActivity {
 
     private final String USER_KEY = "-AbC68u";
     private final String COURSE_KEY = "-KYQFLU24sjQCsgYptzw";
-    private final String QUESTION_KEY = "";
+    private final String QUESTION_KEY = "-KYfEN4nhc9rbFGnM0ro";
     private final String ANSWER_KEY = "";
     private final String SUBS_KEY = "IWFGU7UR";
 
@@ -94,7 +94,7 @@ public class DemoActivity extends AppCompatActivity {
 
         final Answer newAnswer = new Answer("option_0");
 
-        db.createAnswer(COURSE_KEY, QUESTION_KEY, newAnswer).addOnSuccessListener(new OnSuccessListener<Void>() {
+        db.createAnswer(QUESTION_KEY, newAnswer).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 String status = newAnswer.is_correct ? "correct" : "false";
@@ -125,18 +125,12 @@ public class DemoActivity extends AppCompatActivity {
     }
 
     public void onGetQButtonClick(View view) {
-        db.getQuestionByKey(COURSE_KEY, QUESTION_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Question question = dataSnapshot.getValue(Question.class);
-                Log.d(TAG, dataSnapshot.toString());
-            }
+        Intent newPostIntent = new Intent(this, QuizActivity.class);
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        newPostIntent.putExtra("EXTRA_QUIZ_MODE", QuizActivity.QUIZ_MODE_ALL);
+        newPostIntent.putExtra("EXTRA_QUESTION_KEY", QUESTION_KEY);
 
-            }
-        });
+        startActivity(newPostIntent);
     }
 
     public void onGetAButtonClick(View view) {

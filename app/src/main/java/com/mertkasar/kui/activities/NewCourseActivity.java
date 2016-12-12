@@ -1,4 +1,4 @@
-package com.mertkasar.kui;
+package com.mertkasar.kui.activities;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.mertkasar.kui.R;
 import com.mertkasar.kui.core.Database;
 import com.mertkasar.kui.models.Course;
 

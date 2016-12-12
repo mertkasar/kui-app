@@ -4,13 +4,13 @@
     android:id="@+id/view_switcher_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CourseDetailActivity">
+    tools:context=".activities.CourseDetailActivity">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context="com.mertkasar.kui.CourseDetailActivity"
+        tools:context="com.mertkasar.kui.activities.CourseDetailActivity"
         tools:visibility="gone">
 
         <include layout="@layout/content_loading" />

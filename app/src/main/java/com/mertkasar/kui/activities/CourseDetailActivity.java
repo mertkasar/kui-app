@@ -1,4 +1,4 @@
-package com.mertkasar.kui;
+package com.mertkasar.kui.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -14,6 +14,7 @@ import android.widget.ViewSwitcher;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.mertkasar.kui.R;
 import com.mertkasar.kui.core.Database;
 import com.mertkasar.kui.models.Course;
 import com.mertkasar.kui.models.User;

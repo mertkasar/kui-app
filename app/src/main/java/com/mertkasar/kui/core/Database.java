@@ -64,6 +64,10 @@ public final class Database {
         return refUsers.child(uid).setValue(user);
     }
 
+    public DatabaseReference getUsers() {
+        return refUsers;
+    }
+
     public DatabaseReference getUserByKey(final String key) {
         return refUsers.child(key);
     }
@@ -165,6 +169,10 @@ public final class Database {
         return refDB.updateChildren(updateBatch);
     }
 
+    public DatabaseReference getCourses() {
+        return refCourses;
+    }
+
     public DatabaseReference getCourseByKey(String key) {
         return refCourses.child(key);
     }
@@ -222,22 +230,26 @@ public final class Database {
         return task;
     }
 
-    public DatabaseReference getQuestionByKey(String courseKey, String questionKey) {
-        return refQuestions.child(courseKey).child(questionKey);
+    public DatabaseReference getQuestions() {
+        return refQuestions;
+    }
+
+    public DatabaseReference getQuestionByKey(String questionKey) {
+        return refQuestions.child(questionKey);
     }
 
     public DatabaseReference getQuestionsByCourseKey(final String courseKey) {
         return refCourseQuestions.child(courseKey);
     }
 
-    public Task<Void> createAnswer(final String courseKey, final String questionKey, final Answer answer) {
+    public Task<Void> createAnswer(final String questionKey, final Answer answer) {
         Task<Void> task = refAnswers.child(questionKey).push().setValue(answer);
 
         // Update corresponding question stats upon success
         task.addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                refQuestions.child(courseKey).child(questionKey).runTransaction(new Transaction.Handler() {
+                refQuestions.child(questionKey).runTransaction(new Transaction.Handler() {
                     @Override
                     public Transaction.Result doTransaction(MutableData mutableData) {
                         // Retrieve the question
@@ -265,6 +277,24 @@ public final class Database {
         });
 
         return task;
+    }
+
+    public Transaction.Handler recordAnswer(){
+        return new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                return null;
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+
+            }
+        };
+    }
+
+    public DatabaseReference getAnswers() {
+        return refAnswers;
     }
 
     public DatabaseReference getAnswerByKey(String questionKey, String answerKey) {

@@ -1,4 +1,4 @@
-package com.mertkasar.kui;
+package com.mertkasar.kui.activities;
 
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -8,10 +8,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.mertkasar.kui.R;
 import com.mertkasar.kui.core.Database;
 import com.mertkasar.kui.models.Question;
 

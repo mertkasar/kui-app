@@ -30,4 +30,10 @@
     <string name="toast_create_question_failure">Can\'t create a question now</string>
     <string name="hint_option_correct">Correct option</string>
     <string name="hint_option_wrong">Wrong option</string>
+    <string name="button_activity_quiz_check">Check</string>
+    <string name="button_activity_quiz_checking">Checking…</string>
+    <string name="button_activity_quiz_continue">Continue</string>
+    <string name="toast_make_a_choice">Please, make a choice!</string>
+    <string name="toast_correct_answer">Correct answer!</string>
+    <string name="toast_wrong_answer">Wrong answer</string>
 </resources>
