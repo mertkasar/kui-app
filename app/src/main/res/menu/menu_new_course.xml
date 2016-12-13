@@ -5,6 +5,6 @@
     <item
         android:id="@+id/action_new_course_send"
         android:icon="@android:drawable/ic_menu_send"
-        android:title="@string/menu_item_send"
+        android:title="@string/action_send"
         app:showAsAction="always" />
 </menu>
