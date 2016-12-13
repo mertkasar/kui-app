@@ -125,12 +125,17 @@ public class DemoActivity extends AppCompatActivity {
     }
 
     public void onGetQButtonClick(View view) {
-        Intent newPostIntent = new Intent(this, QuizActivity.class);
+        db.getQuestionByKey(QUESTION_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, dataSnapshot.toString());
+            }
 
-        newPostIntent.putExtra("EXTRA_QUIZ_MODE", QuizActivity.QUIZ_MODE_ALL);
-        newPostIntent.putExtra("EXTRA_QUESTION_KEY", QUESTION_KEY);
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-        startActivity(newPostIntent);
+            }
+        });
     }
 
     public void onGetAButtonClick(View view) {
@@ -298,5 +303,20 @@ public class DemoActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void onQAllButtonClick(View view) {
+        Intent newPostIntent = new Intent(this, QuizActivity.class);
+        newPostIntent.putExtra("EXTRA_QUIZ_MODE", QuizActivity.QUIZ_MODE_ALL);
+        startActivity(newPostIntent);
+    }
+
+    public void onQSingleButtonClick(View view) {
+        Intent newPostIntent = new Intent(this, QuizActivity.class);
+
+        newPostIntent.putExtra("EXTRA_QUIZ_MODE", QuizActivity.QUIZ_MODE_SINGLE);
+        newPostIntent.putExtra("EXTRA_QUESTION_KEY", QUESTION_KEY);
+
+        startActivity(newPostIntent);
     }
 }

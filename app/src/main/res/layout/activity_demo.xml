@@ -136,4 +136,22 @@
         android:layout_below="@+id/button15"
         android:onClick="onUSubButtonClick"
         android:text="GETUSUB" />
+
+    <Button
+        android:id="@+id/button13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/button12"
+        android:layout_alignTop="@+id/button8"
+        android:onClick="onQSingleButtonClick"
+        android:text="QSINGLE" />
+
+    <Button
+        android:id="@+id/button17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button13"
+        android:layout_alignStart="@+id/button13"
+        android:onClick="onQAllButtonClick"
+        android:text="QALL" />
 </RelativeLayout>

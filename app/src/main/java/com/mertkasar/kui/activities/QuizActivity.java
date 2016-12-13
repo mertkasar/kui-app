@@ -24,15 +24,14 @@ import com.mertkasar.kui.models.Question;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class QuizActivity extends AppCompatActivity {
     public static final String TAG = QuizActivity.class.getSimpleName();
 
     public static final int QUIZ_MODE_SINGLE = 1;
-    public static final int QUIZ_MODE_COURSE = 2;
-    public static final int QUIZ_MODE_USER_RECENT = 3;
-    public static final int QUIZ_MODE_ALL = 4;
+    public static final int QUIZ_MODE_ALL = 3;
 
     Database mDB;
 
@@ -72,51 +71,59 @@ public class QuizActivity extends AppCompatActivity {
 
         switch (quizMode) {
             case QUIZ_MODE_SINGLE:
-                final String QUESTION_KEY = getIntent().getStringExtra("EXTRA_QUESTION_KEY");
-
-                if (QUESTION_KEY == null) {
-                    throw new IllegalArgumentException("Must pass EXTRA_QUESTION_KEY");
-                }
-
-                mDB.getQuestionByKey(QUESTION_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            mQuestions.push(dataSnapshot);
-                            getNextQuestion();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
+                onQuizModeSingle();
                 break;
 
             case QUIZ_MODE_ALL:
-                mDB.getQuestions().addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            for (DataSnapshot questionSnap : dataSnapshot.getChildren())
-                                mQuestions.push(questionSnap);
-
-                            getNextQuestion();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                onQuizModeAll();
+                break;
 
             default:
                 break;
         }
 
+    }
+
+    public void onQuizModeSingle() {
+        final String QUESTION_KEY = getIntent().getStringExtra("EXTRA_QUESTION_KEY");
+
+        if (QUESTION_KEY == null) {
+            throw new IllegalArgumentException("Must pass EXTRA_QUESTION_KEY");
+        }
+
+        mDB.getQuestionByKey(QUESTION_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    mQuestions.push(dataSnapshot);
+                    getNextQuestion();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void onQuizModeAll() {
+        mDB.getQuestions().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot questionSnap : dataSnapshot.getChildren())
+                        mQuestions.push(questionSnap);
+
+                    getNextQuestion();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void getNextQuestion() {
