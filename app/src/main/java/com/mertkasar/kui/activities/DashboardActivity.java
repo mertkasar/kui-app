@@ -1,5 +1,6 @@
 package com.mertkasar.kui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,9 +12,11 @@ import android.view.MenuItem;
 
 import com.mertkasar.kui.R;
 import com.mertkasar.kui.adapters.DashboardPagerAdapter;
+import com.mertkasar.kui.fragments.CourseFragment;
 
-public class DashboardActivity extends AppCompatActivity {
-
+public class DashboardActivity extends AppCompatActivity implements
+        CourseFragment.OnListFragmentInteractionListener {
+    public static final String TAG = DashboardActivity.class.getSimpleName();
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -69,5 +72,12 @@ public class DashboardActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onListFragmentInteraction(String key) {
+        Intent newPostIntent = new Intent(this, CourseDetailActivity.class);
+        newPostIntent.putExtra("EXTRA_COURSE_KEY", key);
+        startActivity(newPostIntent);
     }
 }

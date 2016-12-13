@@ -10,11 +10,14 @@ public class App extends Application {
 
     public static App instance;
 
+    public String uid;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
         instance = this;
+        uid = "-AbC68u";
 
         Log.d(TAG, "onCreate: App created");
     }
@@ -29,7 +32,7 @@ public class App extends Application {
         return instance;
     }
 
-    public boolean isConnected(){
+    public boolean isConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
     }

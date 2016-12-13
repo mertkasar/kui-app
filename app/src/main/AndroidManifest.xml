@@ -19,18 +19,18 @@
         <activity
             android:name=".activities.NewCourseActivity"
             android:label="@string/title_activity_new_course"
-            android:parentActivityName=".activities.DemoActivity" />
+            android:parentActivityName=".activities.DashboardActivity" />
 
         <activity
             android:name=".activities.CourseDetailActivity"
             android:label="@string/title_activity_course_detail"
-            android:parentActivityName=".activities.DemoActivity"
+            android:parentActivityName=".activities.DashboardActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".activities.NewQuestionActivity"
             android:label="@string/title_activity_new_question"
-            android:parentActivityName=".activities.DemoActivity" />
+            android:parentActivityName=".activities.CourseDetailActivity" />
 
         <activity
             android:name=".activities.QuizActivity"

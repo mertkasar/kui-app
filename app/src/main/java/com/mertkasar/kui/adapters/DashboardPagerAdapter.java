@@ -1,11 +1,13 @@
 package com.mertkasar.kui.adapters;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.mertkasar.kui.R;
+import com.mertkasar.kui.activities.DashboardActivity;
+import com.mertkasar.kui.core.App;
+import com.mertkasar.kui.fragments.CourseFragment;
 import com.mertkasar.kui.fragments.PlaceholderFragment;
 
 /**
@@ -13,18 +15,30 @@ import com.mertkasar.kui.fragments.PlaceholderFragment;
  * one of the sections/tabs/pages.
  */
 public class DashboardPagerAdapter extends FragmentPagerAdapter {
-    private Context mContext;
+    private App app;
 
-    public DashboardPagerAdapter(FragmentManager fm, Context context) {
+    private DashboardActivity mDashboardActivity;
+
+
+    public DashboardPagerAdapter(FragmentManager fm, DashboardActivity dashboardActivity) {
         super(fm);
-        mContext = context;
+
+        app = App.getInstance();
+        mDashboardActivity = dashboardActivity;
     }
 
     @Override
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
+        switch (position) {
+            case 0:
+                return PlaceholderFragment.newInstance(position + 1);
+            case 1:
+                return CourseFragment.newInstance(CourseFragment.MODE_SUBSCRIBED, app.uid);
+            case 2:
+                return CourseFragment.newInstance(CourseFragment.MODE_CREATED, app.uid);
+        }
+
+        return null;
     }
 
     @Override
@@ -37,12 +51,13 @@ public class DashboardPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return mContext.getString(R.string.pager_dashboard_recent);
+                return mDashboardActivity.getString(R.string.pager_dashboard_recent);
             case 1:
-                return mContext.getString(R.string.pager_dashboard_subscribed);
+                return mDashboardActivity.getString(R.string.pager_dashboard_subscribed);
             case 2:
-                return mContext.getString(R.string.pager_dashboard_created);
+                return mDashboardActivity.getString(R.string.pager_dashboard_created);
         }
+
         return null;
     }
 }
