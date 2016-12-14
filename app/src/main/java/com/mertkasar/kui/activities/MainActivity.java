@@ -2,6 +2,8 @@ package com.mertkasar.kui.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -10,6 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.mertkasar.kui.R;
+import com.mertkasar.kui.fragments.CoursesFragment;
+import com.mertkasar.kui.fragments.DashboardFragment;
+import com.mertkasar.kui.fragments.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -30,6 +35,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        displayFragment(new DashboardFragment());
     }
 
     @Override
@@ -48,21 +55,30 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             // Handle the camera action
             case R.id.nav_dashboard:
+                displayFragment(new DashboardFragment());
                 break;
 
             case R.id.nav_courses:
+                displayFragment(new CoursesFragment());
                 break;
 
             case R.id.nav_settings:
+                displayFragment(new SettingsFragment());
                 break;
 
             case R.id.nav_logout:
                 break;
         }
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
+    }
+
+    private void displayFragment(Fragment fragment) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame, fragment);
+        ft.commit();
     }
 }

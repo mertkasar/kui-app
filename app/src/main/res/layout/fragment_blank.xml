@@ -1,0 +1,13 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.mertkasar.kui.fragments.DashboardFragment">
+
+    <TextView
+        android:id="@+id/blank_fragment_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:text="&lt;message&gt;" />
+
+</FrameLayout>
