@@ -22,6 +22,8 @@ import com.mertkasar.kui.models.User;
 public class CourseDetailActivity extends AppCompatActivity {
     public static final String TAG = CourseDetailActivity.class.getSimpleName();
 
+    public static final String EXTRA_COURSE_KEY = "course_key";
+
     private String mCourseKey;
 
     private ViewSwitcher mViewSwitcher;
@@ -50,9 +52,9 @@ public class CourseDetailActivity extends AppCompatActivity {
         mViewSwitcher = (ViewSwitcher) findViewById(R.id.view_switcher_main);
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
 
-        mCourseKey = getIntent().getStringExtra("EXTRA_COURSE_KEY");
+        mCourseKey = getIntent().getStringExtra(EXTRA_COURSE_KEY);
         if (mCourseKey == null) {
-            throw new IllegalArgumentException("Must pass EXTRA_COURSE_KEY");
+            throw new IllegalArgumentException("Must pass " + EXTRA_COURSE_KEY);
         }
 
         mDescriptionTextView = (TextView) findViewById(R.id.description);

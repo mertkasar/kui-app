@@ -3,12 +3,16 @@ package com.mertkasar.kui.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
 import com.mertkasar.kui.R;
 import com.mertkasar.kui.activities.DashboardActivity;
 import com.mertkasar.kui.core.App;
 import com.mertkasar.kui.fragments.CourseFragment;
-import com.mertkasar.kui.fragments.PlaceholderFragment;
+import com.mertkasar.kui.fragments.RecentFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -19,19 +23,22 @@ public class DashboardPagerAdapter extends FragmentPagerAdapter {
 
     private DashboardActivity mDashboardActivity;
 
+    private List<Fragment> mFragments;
 
     public DashboardPagerAdapter(FragmentManager fm, DashboardActivity dashboardActivity) {
         super(fm);
 
         app = App.getInstance();
         mDashboardActivity = dashboardActivity;
+
+        mFragments = new ArrayList<Fragment>(3);
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return PlaceholderFragment.newInstance(position + 1);
+                return RecentFragment.newInstance(app.uid);
             case 1:
                 return CourseFragment.newInstance(CourseFragment.MODE_SUBSCRIBED, app.uid);
             case 2:
@@ -39,6 +46,15 @@ public class DashboardPagerAdapter extends FragmentPagerAdapter {
         }
 
         return null;
+    }
+
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        Fragment createdFragment = (Fragment) super.instantiateItem(container, position);
+
+        mFragments.add(position, createdFragment);
+
+        return createdFragment;
     }
 
     @Override
@@ -59,5 +75,9 @@ public class DashboardPagerAdapter extends FragmentPagerAdapter {
         }
 
         return null;
+    }
+
+    public Fragment getFragment(int position) {
+        return mFragments.get(position);
     }
 }

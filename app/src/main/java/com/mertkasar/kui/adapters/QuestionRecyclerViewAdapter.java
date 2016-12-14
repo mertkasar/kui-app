@@ -8,17 +8,17 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.mertkasar.kui.R;
-import com.mertkasar.kui.fragments.CourseFragment.OnCourseTouchedListener;
-import com.mertkasar.kui.models.Course;
+import com.mertkasar.kui.fragments.RecentFragment.OnQuestionClickedListener;
+import com.mertkasar.kui.models.Question;
 
 import java.util.List;
 
-public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecyclerViewAdapter.ViewHolder> {
+public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRecyclerViewAdapter.ViewHolder> {
 
     private List<DataSnapshot> mDataSet;
-    private final OnCourseTouchedListener mListener;
+    private final OnQuestionClickedListener mListener;
 
-    public CourseRecyclerViewAdapter(List<DataSnapshot> dataSet, OnCourseTouchedListener listener) {
+    public QuestionRecyclerViewAdapter(List<DataSnapshot> dataSet, OnQuestionClickedListener listener) {
         mDataSet = dataSet;
         mListener = listener;
     }
@@ -26,7 +26,7 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_course_list, parent, false);
+                .inflate(R.layout.item_question_list, parent, false);
 
         return new ViewHolder(view);
     }
@@ -36,7 +36,7 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
         DataSnapshot current = mDataSet.get(position);
 
         holder.mKey = current.getKey();
-        holder.mItem = current.getValue(Course.class);
+        holder.mItem = current.getValue(Question.class);
         holder.mIdView.setText(holder.mItem.title);
         holder.mContentView.setText(holder.mItem.description);
 
@@ -46,7 +46,7 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onCourseTouchedListener(holder.mKey);
+                    mListener.onQuestionClickedListener(holder.mKey);
                 }
             }
         });
@@ -62,13 +62,13 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
         public final TextView mIdView;
         public final TextView mContentView;
         public String mKey;
-        public Course mItem;
+        public Question mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.text1);
-            mContentView = (TextView) view.findViewById(R.id.text2);
+            mIdView = (TextView) view.findViewById(R.id.question_title);
+            mContentView = (TextView) view.findViewById(R.id.question_description);
         }
 
         @Override

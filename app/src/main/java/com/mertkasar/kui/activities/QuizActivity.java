@@ -1,10 +1,7 @@
 package com.mertkasar.kui.activities;
 
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -18,17 +15,20 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.mertkasar.kui.R;
+import com.mertkasar.kui.core.App;
 import com.mertkasar.kui.core.Database;
 import com.mertkasar.kui.models.Question;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 public class QuizActivity extends AppCompatActivity {
     public static final String TAG = QuizActivity.class.getSimpleName();
+
+    public static final String EXTRA_QUIZ_MODE = "quiz_mode";
+    public static final String EXTRA_QUESTION_KEY = "question_key";
 
     public static final int QUIZ_MODE_SINGLE = 1;
     public static final int QUIZ_MODE_ALL = 3;
@@ -53,9 +53,9 @@ public class QuizActivity extends AppCompatActivity {
 
         mDB = Database.getInstance();
 
-        mQuizMode = getIntent().getIntExtra("EXTRA_QUIZ_MODE", -1);
+        mQuizMode = getIntent().getIntExtra(EXTRA_QUIZ_MODE, -1);
         if (mQuizMode == -1) {
-            throw new IllegalArgumentException("Must pass EXTRA_QUIZ_MODE");
+            throw new IllegalArgumentException("Must pass " + EXTRA_QUIZ_MODE);
         }
 
         mTitleTextView = (TextView) findViewById(R.id.title);
@@ -85,10 +85,10 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     public void onQuizModeSingle() {
-        final String QUESTION_KEY = getIntent().getStringExtra("EXTRA_QUESTION_KEY");
+        final String QUESTION_KEY = getIntent().getStringExtra(EXTRA_QUESTION_KEY);
 
         if (QUESTION_KEY == null) {
-            throw new IllegalArgumentException("Must pass EXTRA_QUESTION_KEY");
+            throw new IllegalArgumentException("Must pass " + EXTRA_QUESTION_KEY);
         }
 
         mDB.getQuestionByKey(QUESTION_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -192,8 +192,12 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
                 if (databaseError == null) {
-                    if (mQuestions.isEmpty())
+                    mDB.removeUserRecentByKey(App.getInstance().uid, mCurrentQuestionKey);
+
+                    if (mQuestions.isEmpty()) {
+                        setResult(RESULT_OK);
                         finish();
+                    }
 
                     mButtonViewFlipper.showNext();
                 }

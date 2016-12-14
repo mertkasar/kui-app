@@ -38,6 +38,7 @@ public final class Database {
 
     private DatabaseReference refUserCourses;
     private DatabaseReference refUserSubscriptions;
+    private DatabaseReference refUserRecent;
     private DatabaseReference refCourseSubscribers;
     private DatabaseReference refCourseQuestions;
 
@@ -54,6 +55,7 @@ public final class Database {
 
         refUserCourses = firebaseDB.getReference("user_courses");
         refUserSubscriptions = firebaseDB.getReference("user_subscriptions");
+        refUserRecent = firebaseDB.getReference("user_recent");
         refCourseSubscribers = firebaseDB.getReference("course_subscribers");
         refCourseQuestions = firebaseDB.getReference("course_questions");
 
@@ -78,6 +80,14 @@ public final class Database {
 
     public DatabaseReference getUserSubsByKey(final String key) {
         return refUserSubscriptions.child(key);
+    }
+
+    public DatabaseReference getUserRecentByKey(final String key) {
+        return refUserRecent.child(key);
+    }
+
+    public Task<Void> removeUserRecentByKey(final String uid, final String questionKey){
+        return refUserRecent.child(uid).child(questionKey).removeValue();
     }
 
     public Task<Void> subscribeUser(final String userKey, final String courseKey) {
@@ -279,7 +289,7 @@ public final class Database {
         return task;
     }
 
-    public Transaction.Handler recordAnswer(){
+    public Transaction.Handler recordAnswer() {
         return new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {

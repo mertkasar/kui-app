@@ -8,12 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.mertkasar.kui.R;
-import com.mertkasar.kui.adapters.CourseRecyclerViewAdapter;
+import com.mertkasar.kui.adapters.QuestionRecyclerViewAdapter;
 import com.mertkasar.kui.core.Database;
 
 import java.util.ArrayList;
@@ -21,47 +21,35 @@ import java.util.ArrayList;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnCourseTouchedListener}
+ * Activities containing this fragment MUST implement the {@link OnQuestionClickedListener}
  * interface.
  */
-public class CourseFragment extends Fragment {
-    public static final String TAG = CourseFragment.class.getSimpleName();
+public class RecentFragment extends Fragment {
+    public static final String TAG = RecentFragment.class.getSimpleName();
 
-
-    public static final int MODE_SUBSCRIBED = 1;
-    public static final int MODE_CREATED = 2;
-
-    private static final String ARG_DISPLAY_MODE = "display_mode";
     private static final String ARG_USER_KEY = "user_key";
 
-    private OnCourseTouchedListener mListener;
+    private OnQuestionClickedListener mListener;
 
-    private int mDisplayMode;
     private String mUserKey;
 
-    private ArrayList<DataSnapshot> mCourseList;
-    private CourseRecyclerViewAdapter mAdapter;
+    private ArrayList<DataSnapshot> mQuestionList;
+    private QuestionRecyclerViewAdapter mAdapter;
 
     private Database mDB;
-    private DatabaseReference mDBRef;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public CourseFragment() {
+    public RecentFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static CourseFragment newInstance(final int displayMode, final String userKey) {
-        CourseFragment fragment = new CourseFragment();
+    public static RecentFragment newInstance(final String userKey) {
+        RecentFragment fragment = new RecentFragment();
+
         Bundle args = new Bundle();
-
-        args.putInt(ARG_DISPLAY_MODE, displayMode);
         args.putString(ARG_USER_KEY, userKey);
-
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -69,23 +57,12 @@ public class CourseFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mDisplayMode = getArguments().getInt(ARG_DISPLAY_MODE);
         mUserKey = getArguments().getString(ARG_USER_KEY);
 
-        mCourseList = new ArrayList<>();
-        mAdapter = new CourseRecyclerViewAdapter(mCourseList, mListener);
+        mQuestionList = new ArrayList<>();
+        mAdapter = new QuestionRecyclerViewAdapter(mQuestionList, mListener);
 
         mDB = Database.getInstance();
-        switch (mDisplayMode) {
-            case MODE_SUBSCRIBED:
-                mDBRef = mDB.getUserSubsByKey(mUserKey);
-                break;
-            case MODE_CREATED:
-                mDBRef = mDB.getUserCoursesByKey(mUserKey);
-                break;
-            default:
-                throw new IllegalArgumentException("Undefined display mode!");
-        }
 
         getItems();
     }
@@ -96,7 +73,9 @@ public class CourseFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_course_list, container, false);
 
         RecyclerView recyclerView = (RecyclerView) view;
+        refreshItems();
         recyclerView.setAdapter(mAdapter);
+
         return view;
     }
 
@@ -104,11 +83,11 @@ public class CourseFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnCourseTouchedListener) {
-            mListener = (OnCourseTouchedListener) context;
+        if (context instanceof RecentFragment.OnQuestionClickedListener) {
+            mListener = (RecentFragment.OnQuestionClickedListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnCourseTouchedListener");
+                    + " must implement OnQuestionClickedListener");
         }
     }
 
@@ -128,29 +107,29 @@ public class CourseFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnCourseTouchedListener {
+    public interface OnQuestionClickedListener {
         // TODO: Update argument type and name
-        void onCourseTouchedListener(String key);
+        void onQuestionClickedListener(String key);
     }
 
     public void refreshItems() {
-        mCourseList.clear();
+        mQuestionList.clear();
         mAdapter.notifyDataSetChanged();
 
         getItems();
     }
 
     private void getItems() {
-        mDBRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mDB.getUserRecentByKey(mUserKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    for (DataSnapshot courseSnap : dataSnapshot.getChildren()) {
-                        mDB.getCourseByKey(courseSnap.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    for (DataSnapshot questionSnap : dataSnapshot.getChildren()) {
+                        mDB.getQuestionByKey(questionSnap.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
-                                    mCourseList.add(dataSnapshot);
+                                    mQuestionList.add(dataSnapshot);
                                     mAdapter.notifyDataSetChanged();
                                 }
                             }

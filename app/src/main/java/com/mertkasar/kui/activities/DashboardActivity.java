@@ -3,7 +3,6 @@ package com.mertkasar.kui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,23 +12,16 @@ import android.view.MenuItem;
 import com.mertkasar.kui.R;
 import com.mertkasar.kui.adapters.DashboardPagerAdapter;
 import com.mertkasar.kui.fragments.CourseFragment;
+import com.mertkasar.kui.fragments.RecentFragment;
 
 public class DashboardActivity extends AppCompatActivity implements
-        CourseFragment.OnListFragmentInteractionListener {
+        CourseFragment.OnCourseTouchedListener,
+        RecentFragment.OnQuestionClickedListener {
     public static final String TAG = DashboardActivity.class.getSimpleName();
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private DashboardPagerAdapter mDashboardPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
+    public static final int RC_QUIZ = 1;
+
+    private DashboardPagerAdapter mDashboardPagerAdapter;
     private ViewPager mViewPager;
 
     @Override
@@ -51,6 +43,18 @@ public class DashboardActivity extends AppCompatActivity implements
         tabLayout.setupWithViewPager(mViewPager);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case RC_QUIZ:
+                //TODO: Instead of doing this, consider make it realtime
+                RecentFragment fragment = (RecentFragment) mDashboardPagerAdapter.getFragment(0);
+                fragment.refreshItems();
+                break;
+            default:
+                break;
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -75,9 +79,19 @@ public class DashboardActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onListFragmentInteraction(String key) {
-        Intent newPostIntent = new Intent(this, CourseDetailActivity.class);
-        newPostIntent.putExtra("EXTRA_COURSE_KEY", key);
-        startActivity(newPostIntent);
+    public void onCourseTouchedListener(String key) {
+        Intent intent = new Intent(this, CourseDetailActivity.class);
+        intent.putExtra(CourseDetailActivity.EXTRA_COURSE_KEY, key);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onQuestionClickedListener(String key) {
+        Intent intent = new Intent(this, QuizActivity.class);
+
+        intent.putExtra(QuizActivity.EXTRA_QUIZ_MODE, QuizActivity.QUIZ_MODE_SINGLE);
+        intent.putExtra(QuizActivity.EXTRA_QUESTION_KEY, key);
+
+        startActivityForResult(intent, RC_QUIZ);
     }
 }
