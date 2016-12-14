@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
 import com.mertkasar.kui.R;
-import com.mertkasar.kui.activities.DashboardActivity;
+import com.mertkasar.kui.activities.CoursesActivity;
 import com.mertkasar.kui.core.App;
 import com.mertkasar.kui.fragments.CourseFragment;
 import com.mertkasar.kui.fragments.RecentFragment;
@@ -18,18 +18,18 @@ import java.util.List;
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class DashboardPagerAdapter extends FragmentPagerAdapter {
+public class CoursesPagerAdapter extends FragmentPagerAdapter {
     private App app;
 
-    private DashboardActivity mDashboardActivity;
+    private CoursesActivity mCoursesActivity;
 
     private List<Fragment> mFragments;
 
-    public DashboardPagerAdapter(FragmentManager fm, DashboardActivity dashboardActivity) {
+    public CoursesPagerAdapter(FragmentManager fm, CoursesActivity coursesActivity) {
         super(fm);
 
         app = App.getInstance();
-        mDashboardActivity = dashboardActivity;
+        mCoursesActivity = coursesActivity;
 
         mFragments = new ArrayList<Fragment>(3);
     }
@@ -38,11 +38,11 @@ public class DashboardPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return RecentFragment.newInstance(app.uid);
-            case 1:
                 return CourseFragment.newInstance(CourseFragment.MODE_SUBSCRIBED, app.uid);
-            case 2:
+            case 1:
                 return CourseFragment.newInstance(CourseFragment.MODE_CREATED, app.uid);
+            case 2:
+                return CourseFragment.newInstance(CourseFragment.MODE_BROWSE, app.uid);
         }
 
         return null;
@@ -67,11 +67,11 @@ public class DashboardPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return mDashboardActivity.getString(R.string.pager_dashboard_recent);
+                return mCoursesActivity.getString(R.string.pager_courses_subscribed);
             case 1:
-                return mDashboardActivity.getString(R.string.pager_dashboard_subscribed);
+                return mCoursesActivity.getString(R.string.pager_courses_created);
             case 2:
-                return mDashboardActivity.getString(R.string.pager_dashboard_created);
+                return mCoursesActivity.getString(R.string.pager_courses_browse);
         }
 
         return null;

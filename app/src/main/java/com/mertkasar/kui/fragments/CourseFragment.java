@@ -30,6 +30,7 @@ public class CourseFragment extends Fragment {
 
     public static final int MODE_SUBSCRIBED = 1;
     public static final int MODE_CREATED = 2;
+    public static final int MODE_BROWSE = 3;
 
     private static final String ARG_DISPLAY_MODE = "display_mode";
     private static final String ARG_USER_KEY = "user_key";
@@ -82,6 +83,9 @@ public class CourseFragment extends Fragment {
                 break;
             case MODE_CREATED:
                 mDBRef = mDB.getUserCoursesByKey(mUserKey);
+                break;
+            case MODE_BROWSE:
+                mDBRef = mDB.getCourses();
                 break;
             default:
                 throw new IllegalArgumentException("Undefined display mode!");

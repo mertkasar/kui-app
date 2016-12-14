@@ -19,12 +19,12 @@
         <activity
             android:name=".activities.NewCourseActivity"
             android:label="@string/title_activity_new_course"
-            android:parentActivityName=".activities.DashboardActivity" />
+            android:parentActivityName=".activities.CoursesActivity" />
 
         <activity
             android:name=".activities.CourseDetailActivity"
             android:label="@string/title_activity_course_detail"
-            android:parentActivityName=".activities.DashboardActivity"
+            android:parentActivityName=".activities.CoursesActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
@@ -37,8 +37,8 @@
             android:parentActivityName=".activities.DemoActivity" />
 
         <activity
-            android:name=".activities.DashboardActivity"
-            android:label="@string/title_activity_dashboard"
+            android:name=".activities.CoursesActivity"
+            android:label="@string/title_activity_courses"
             android:theme="@style/AppTheme.NoActionBar">
 
             <intent-filter>

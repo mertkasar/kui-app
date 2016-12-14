@@ -5,7 +5,7 @@
     <string name="title_activity_new_course">New Course</string>
     <string name="title_activity_course_detail">&lt;course-title&gt;</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_dashboard">Dashboard</string>
+    <string name="title_activity_courses">Courses</string>
 
     <string name="toast_create_course_success">Course created</string>
     <string name="toast_create_question_success">Posted successfully.</string>
@@ -43,7 +43,7 @@
 
     <string name="section_format">Hello World from section: %1$d</string>
 
-    <string name="pager_dashboard_recent">Recent</string>
-    <string name="pager_dashboard_subscribed">Subscribed</string>
-    <string name="pager_dashboard_created">Created</string>
+    <string name="pager_courses_subscribed">Subscribed</string>
+    <string name="pager_courses_created">Created</string>
+    <string name="pager_courses_browse">Browse</string>
 </resources>
