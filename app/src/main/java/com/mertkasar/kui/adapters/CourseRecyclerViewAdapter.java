@@ -1,6 +1,7 @@
 package com.mertkasar.kui.adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.mertkasar.kui.R;
+import com.mertkasar.kui.activities.CourseDetailActivity;
 import com.mertkasar.kui.models.Course;
 
 import java.util.List;
@@ -43,7 +45,9 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Start course detail activity
+                Intent intent = new Intent(mActivity, CourseDetailActivity.class);
+                intent.putExtra(CourseDetailActivity.EXTRA_COURSE_KEY, holder.mKey);
+                mActivity.startActivity(intent);
             }
         });
     }

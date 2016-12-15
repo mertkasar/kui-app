@@ -1,6 +1,7 @@
 package com.mertkasar.kui.adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.mertkasar.kui.R;
+import com.mertkasar.kui.activities.QuizActivity;
 import com.mertkasar.kui.models.Question;
 
 import java.util.List;
@@ -43,7 +45,12 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Open QuizActivity
+                Intent intent = new Intent(mActivity, QuizActivity.class);
+
+                intent.putExtra(QuizActivity.EXTRA_QUIZ_MODE, QuizActivity.QUIZ_MODE_SINGLE);
+                intent.putExtra(QuizActivity.EXTRA_QUESTION_KEY, holder.mKey);
+
+                mActivity.startActivity(intent);
             }
         });
     }
