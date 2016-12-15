@@ -10,7 +10,10 @@ import android.widget.TextView;
 
 import com.mertkasar.kui.R;
 
-public class SettingsFragment extends Fragment {
+public class NavSettingsFragment extends Fragment {
+    public NavSettingsFragment() {
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

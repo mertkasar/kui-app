@@ -1,5 +1,6 @@
 package com.mertkasar.kui.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,14 +19,8 @@ import com.mertkasar.kui.core.Database;
 
 import java.util.ArrayList;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnCourseTouchedListener}
- * interface.
- */
-public class CourseFragment extends Fragment {
-    public static final String TAG = CourseFragment.class.getSimpleName();
+public class CourseListFragment extends Fragment {
+    public static final String TAG = CourseListFragment.class.getSimpleName();
 
 
     public static final int MODE_SUBSCRIBED = 1;
@@ -34,8 +29,6 @@ public class CourseFragment extends Fragment {
 
     private static final String ARG_DISPLAY_MODE = "display_mode";
     private static final String ARG_USER_KEY = "user_key";
-
-    private OnCourseTouchedListener mListener;
 
     private int mDisplayMode;
     private String mUserKey;
@@ -46,17 +39,13 @@ public class CourseFragment extends Fragment {
     private Database mDB;
     private DatabaseReference mDBRef;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public CourseFragment() {
+    public CourseListFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static CourseFragment newInstance(final int displayMode, final String userKey) {
-        CourseFragment fragment = new CourseFragment();
+    public static CourseListFragment newInstance(int displayMode, String userKey) {
+        CourseListFragment fragment = new CourseListFragment();
         Bundle args = new Bundle();
 
         args.putInt(ARG_DISPLAY_MODE, displayMode);
@@ -74,7 +63,7 @@ public class CourseFragment extends Fragment {
         mUserKey = getArguments().getString(ARG_USER_KEY);
 
         mCourseList = new ArrayList<>();
-        mAdapter = new CourseRecyclerViewAdapter(mCourseList, mListener);
+        mAdapter = new CourseRecyclerViewAdapter(mCourseList, getActivity());
 
         mDB = Database.getInstance();
         switch (mDisplayMode) {
@@ -102,39 +91,6 @@ public class CourseFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view;
         recyclerView.setAdapter(mAdapter);
         return view;
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnCourseTouchedListener) {
-            mListener = (OnCourseTouchedListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnCourseTouchedListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnCourseTouchedListener {
-        // TODO: Update argument type and name
-        void onCourseTouchedListener(String key);
     }
 
     public void refreshItems() {

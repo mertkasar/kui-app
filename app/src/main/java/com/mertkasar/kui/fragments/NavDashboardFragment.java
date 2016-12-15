@@ -18,8 +18,8 @@ import com.mertkasar.kui.core.Database;
 
 import java.util.ArrayList;
 
-public class DashboardFragment extends Fragment {
-    public static final String TAG = DashboardFragment.class.getSimpleName();
+public class NavDashboardFragment extends Fragment {
+    public static final String TAG = NavDashboardFragment.class.getSimpleName();
 
     private App mApp;
     private Database mDB;
@@ -28,6 +28,9 @@ public class DashboardFragment extends Fragment {
 
     private ArrayList<DataSnapshot> mQuestionList;
     private QuestionRecyclerViewAdapter mAdapter;
+
+    public NavDashboardFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

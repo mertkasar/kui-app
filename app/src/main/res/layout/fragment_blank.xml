@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mertkasar.kui.fragments.DashboardFragment">
+    tools:context="com.mertkasar.kui.fragments.NavDashboardFragment">
 
     <TextView
         android:id="@+id/blank_fragment_message"

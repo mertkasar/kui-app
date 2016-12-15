@@ -1,5 +1,6 @@
 package com.mertkasar.kui.adapters;
 
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +9,6 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.mertkasar.kui.R;
-import com.mertkasar.kui.fragments.CourseFragment.OnCourseTouchedListener;
 import com.mertkasar.kui.models.Course;
 
 import java.util.List;
@@ -16,11 +16,11 @@ import java.util.List;
 public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecyclerViewAdapter.ViewHolder> {
 
     private List<DataSnapshot> mDataSet;
-    private final OnCourseTouchedListener mListener;
+    private Activity mActivity;
 
-    public CourseRecyclerViewAdapter(List<DataSnapshot> dataSet, OnCourseTouchedListener listener) {
+    public CourseRecyclerViewAdapter(List<DataSnapshot> dataSet, Activity activity) {
         mDataSet = dataSet;
-        mListener = listener;
+        mActivity = activity;
     }
 
     @Override
@@ -43,11 +43,7 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onCourseTouchedListener(holder.mKey);
-                }
+                //TODO: Start course detail activity
             }
         });
     }

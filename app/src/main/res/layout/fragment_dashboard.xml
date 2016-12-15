@@ -6,5 +6,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutManager="LinearLayoutManager"
-    tools:context="com.mertkasar.kui.fragments.DashboardFragment"
-    tools:listitem="@layout/item_course_list" />
+    tools:context="com.mertkasar.kui.fragments.NavDashboardFragment"
+    tools:listitem="@layout/item_question_list" />

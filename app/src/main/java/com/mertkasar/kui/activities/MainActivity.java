@@ -12,9 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.mertkasar.kui.R;
-import com.mertkasar.kui.fragments.CoursesFragment;
-import com.mertkasar.kui.fragments.DashboardFragment;
-import com.mertkasar.kui.fragments.SettingsFragment;
+import com.mertkasar.kui.fragments.NavCoursesFragment;
+import com.mertkasar.kui.fragments.NavDashboardFragment;
+import com.mertkasar.kui.fragments.NavSettingsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,8 +35,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        displayFragment(new DashboardFragment());
+        navigationView.setCheckedItem(R.id.nav_dashboard);
     }
 
     @Override
@@ -55,15 +54,15 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             // Handle the camera action
             case R.id.nav_dashboard:
-                displayFragment(new DashboardFragment());
+                displayFragment(new NavDashboardFragment());
                 break;
 
             case R.id.nav_courses:
-                displayFragment(new CoursesFragment());
+                displayFragment(new NavCoursesFragment());
                 break;
 
             case R.id.nav_settings:
-                displayFragment(new SettingsFragment());
+                displayFragment(new NavSettingsFragment());
                 break;
 
             case R.id.nav_logout:
