@@ -9,7 +9,6 @@ import com.mertkasar.kui.R;
 import com.mertkasar.kui.activities.CoursesActivity;
 import com.mertkasar.kui.core.App;
 import com.mertkasar.kui.fragments.CourseFragment;
-import com.mertkasar.kui.fragments.RecentFragment;
 
 import java.util.ArrayList;
 import java.util.List;

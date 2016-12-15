@@ -1,5 +1,6 @@
 package com.mertkasar.kui.adapters;
 
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +9,6 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.mertkasar.kui.R;
-import com.mertkasar.kui.fragments.RecentFragment.OnQuestionClickedListener;
 import com.mertkasar.kui.models.Question;
 
 import java.util.List;
@@ -16,11 +16,11 @@ import java.util.List;
 public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRecyclerViewAdapter.ViewHolder> {
 
     private List<DataSnapshot> mDataSet;
-    private final OnQuestionClickedListener mListener;
+    private Activity mActivity;
 
-    public QuestionRecyclerViewAdapter(List<DataSnapshot> dataSet, OnQuestionClickedListener listener) {
+    public QuestionRecyclerViewAdapter(List<DataSnapshot> dataSet, Activity listener) {
         mDataSet = dataSet;
-        mListener = listener;
+        mActivity = listener;
     }
 
     @Override
@@ -43,11 +43,7 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onQuestionClickedListener(holder.mKey);
-                }
+                //TODO: Open QuizActivity
             }
         });
     }

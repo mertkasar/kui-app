@@ -6,13 +6,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.mertkasar.kui.R;
 import com.mertkasar.kui.adapters.CoursesPagerAdapter;
 import com.mertkasar.kui.fragments.CourseFragment;
-import com.mertkasar.kui.fragments.RecentFragment;
 
 public class CoursesActivity extends AppCompatActivity implements
         CourseFragment.OnCourseTouchedListener {
