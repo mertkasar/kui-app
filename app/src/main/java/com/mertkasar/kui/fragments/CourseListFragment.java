@@ -1,8 +1,7 @@
 package com.mertkasar.kui.fragments;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -86,11 +85,15 @@ public class CourseListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        return inflater.inflate(R.layout.fragment_course_list, container, false);
+    }
 
-        RecyclerView recyclerView = (RecyclerView) view;
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.course_list);
         recyclerView.setAdapter(mAdapter);
-        return view;
     }
 
     public void refreshItems() {

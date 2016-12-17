@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_margin="4dp"
-    tools:showIn="@layout/fragment_dashboard">
+    tools:showIn="@layout/fragment_nav_dashboard">
 
     <TextView
         android:id="@+id/text1"
