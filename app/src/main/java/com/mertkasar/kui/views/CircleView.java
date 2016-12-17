@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 public class CircleView extends View {
@@ -21,12 +20,13 @@ public class CircleView extends View {
     private RectF mOuterRect;
     private RectF mInnerRect;
 
-    private float mRatio = 30;
+    private int mRatio = 30;
+    private int mOuterSweepAngle;
 
     public CircleView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        mInnerWidth = 3;
+        mInnerWidth = 4;
         mOuterWidth = 12;
 
         mOuterColor = new Paint();
@@ -46,10 +46,8 @@ public class CircleView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        float outerSweepAngle = 360.f * mRatio / 100.f;
-
         canvas.drawArc(mInnerRect, 270, 360, false, mInnerColor);
-        canvas.drawArc(mOuterRect, 270, outerSweepAngle, false, mOuterColor);
+        canvas.drawArc(mOuterRect, 270, mOuterSweepAngle, false, mOuterColor);
     }
 
     @Override
@@ -60,5 +58,14 @@ public class CircleView extends View {
 
         mInnerRect = new RectF(shift, shift, w - shift, h - shift);
         mOuterRect = new RectF(shift, shift, w - shift, h - shift);
+    }
+
+    public int getRatio() {
+        return mRatio;
+    }
+
+    public void setRatio(int ratio) {
+        mRatio = ratio;
+        mOuterSweepAngle = 360 * mRatio / 100;
     }
 }

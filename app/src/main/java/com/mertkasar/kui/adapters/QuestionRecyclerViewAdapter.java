@@ -3,6 +3,7 @@ package com.mertkasar.kui.adapters;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.mertkasar.kui.R;
 import com.mertkasar.kui.activities.QuizActivity;
 import com.mertkasar.kui.models.Question;
+import com.mertkasar.kui.views.CircleView;
 
 import java.util.List;
 
@@ -39,6 +41,11 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
 
         holder.mKey = current.getKey();
         holder.mItem = current.getValue(Question.class);
+
+        int ratio = (int) (holder.mItem.correct_count / (double) holder.mItem.answer_count * 100);
+        holder.mPercentage.setText("%" + ratio);
+        holder.mCircle.setRatio(ratio);
+
         holder.mIdView.setText(holder.mItem.title);
         holder.mContentView.setText(holder.mItem.description);
 
@@ -62,6 +69,8 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
+        public final CircleView mCircle;
+        public final TextView mPercentage;
         public final TextView mIdView;
         public final TextView mContentView;
         public String mKey;
@@ -70,6 +79,8 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
         public ViewHolder(View view) {
             super(view);
             mView = view;
+            mCircle = (CircleView) view.findViewById(R.id.primary_action);
+            mPercentage = (TextView) view.findViewById(R.id.percentage);
             mIdView = (TextView) view.findViewById(R.id.question_title);
             mContentView = (TextView) view.findViewById(R.id.question_description);
         }

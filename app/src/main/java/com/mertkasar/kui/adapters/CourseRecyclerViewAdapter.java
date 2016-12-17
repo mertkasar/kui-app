@@ -67,8 +67,8 @@ public class CourseRecyclerViewAdapter extends RecyclerView.Adapter<CourseRecycl
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.text1);
-            mContentView = (TextView) view.findViewById(R.id.text2);
+            mIdView = (TextView) view.findViewById(R.id.course_title);
+            mContentView = (TextView) view.findViewById(R.id.course_description);
         }
 
         @Override
