@@ -1,8 +1,11 @@
 package com.mertkasar.kui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.mertkasar.kui.R;
+import com.mertkasar.kui.activities.QuizActivity;
 import com.mertkasar.kui.adapters.QuestionRecyclerViewAdapter;
 import com.mertkasar.kui.core.App;
 import com.mertkasar.kui.core.Database;
@@ -25,9 +29,12 @@ public class NavDashboardFragment extends Fragment {
     private Database mDB;
 
     private String mUserKey;
+    private long mSize;
 
     private ArrayList<DataSnapshot> mQuestionList;
     private QuestionRecyclerViewAdapter mAdapter;
+
+    private FloatingActionButton mFAB;
 
     public NavDashboardFragment() {
     }
@@ -58,6 +65,17 @@ public class NavDashboardFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Dashboard");
 
+        mFAB = (FloatingActionButton) view.findViewById(R.id.fab);
+        mFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), QuizActivity.class);
+                intent.putExtra(QuizActivity.EXTRA_QUIZ_MODE, QuizActivity.QUIZ_MODE_RECENT);
+                startActivity(intent);
+            }
+        });
+        mFAB.hide();
+
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recent_questions_list);
         recyclerView.setAdapter(mAdapter);
     }
@@ -74,13 +92,19 @@ public class NavDashboardFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    mSize = dataSnapshot.getChildrenCount();
+
                     for (DataSnapshot questionSnap : dataSnapshot.getChildren()) {
                         mDB.getQuestionByKey(questionSnap.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
                                     mQuestionList.add(dataSnapshot);
-                                    mAdapter.notifyDataSetChanged();
+
+                                    if (mQuestionList.size() == mSize) {
+                                        mAdapter.notifyDataSetChanged();
+                                        mFAB.show();
+                                    }
                                 }
                             }
 

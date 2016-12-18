@@ -31,6 +31,7 @@ public class QuizActivity extends AppCompatActivity {
     public static final String EXTRA_QUESTION_KEY = "question_key";
 
     public static final int QUIZ_MODE_SINGLE = 1;
+    public static final int QUIZ_MODE_RECENT = 2;
     public static final int QUIZ_MODE_ALL = 3;
 
     Database mDB;
@@ -40,6 +41,8 @@ public class QuizActivity extends AppCompatActivity {
     Question mCurrentQuestion;
 
     private int mQuizMode;
+    private String mUID;
+    private long mSize;
 
     private TextView mTitleTextView;
     private TextView mDescriptionTextView;
@@ -58,6 +61,8 @@ public class QuizActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Must pass " + EXTRA_QUIZ_MODE);
         }
 
+        mUID = App.getInstance().uid;
+
         mTitleTextView = (TextView) findViewById(R.id.title);
         mDescriptionTextView = (TextView) findViewById(R.id.description);
         mOptionsRadioGroup = (RadioGroup) findViewById(R.id.options);
@@ -72,6 +77,10 @@ public class QuizActivity extends AppCompatActivity {
         switch (quizMode) {
             case QUIZ_MODE_SINGLE:
                 onQuizModeSingle();
+                break;
+
+            case QUIZ_MODE_RECENT:
+                onQuizModeRecent();
                 break;
 
             case QUIZ_MODE_ALL:
@@ -107,6 +116,42 @@ public class QuizActivity extends AppCompatActivity {
         });
     }
 
+    public void onQuizModeRecent() {
+        mDB.getUserRecentByKey(mUID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    mSize = dataSnapshot.getChildrenCount();
+
+                    for (DataSnapshot questionSnap : dataSnapshot.getChildren()) {
+                        mDB.getQuestionByKey(questionSnap.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    mQuestions.push(dataSnapshot);
+
+                                    if (mQuestions.size() == mSize) {
+                                        getNextQuestion();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public void onQuizModeAll() {
         mDB.getQuestions().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -128,8 +173,10 @@ public class QuizActivity extends AppCompatActivity {
 
     private void getNextQuestion() {
         DataSnapshot questionSnap = mQuestions.pop();
+
         mCurrentQuestionKey = questionSnap.getKey();
         mCurrentQuestion = questionSnap.getValue(Question.class);
+
         bindLayout(mCurrentQuestion);
     }
 
