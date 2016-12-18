@@ -10,7 +10,6 @@
         android:id="@+id/recent_questions_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/item_question_list" />
 
     <android.support.design.widget.FloatingActionButton
