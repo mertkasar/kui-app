@@ -5,5 +5,6 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
     android:background="@color/grey_300"
+    android:onClick="onOptionSelected"
     android:padding="12dp"
     tools:text="&lt;option&gt;" />

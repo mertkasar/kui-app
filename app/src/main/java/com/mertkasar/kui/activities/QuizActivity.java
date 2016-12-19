@@ -2,6 +2,7 @@ package com.mertkasar.kui.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -204,18 +205,24 @@ public class QuizActivity extends AppCompatActivity {
 
     public void onCheckButtonCallback(View view) {
         int checkedID = mOptionsRadioGroup.getCheckedRadioButtonId();
+
         if (checkedID == -1) {
             Toast.makeText(QuizActivity.this, R.string.toast_make_a_choice, Toast.LENGTH_SHORT).show();
             return;
         }
 
+        //Disable elements
+        for (int i = 0; i < mOptionsRadioGroup.getChildCount(); i++) {
+            mOptionsRadioGroup.getChildAt(i).setEnabled(false);
+        }
+
+        //Show next button state
         mButtonViewFlipper.showNext();
 
-        RadioButton checkedButton = (RadioButton) mOptionsRadioGroup.findViewById(checkedID);
+        final RadioButton checkedButton = (RadioButton) mOptionsRadioGroup.findViewById(checkedID);
         String tag = (String) checkedButton.getTag();
 
         final boolean isCorrect = tag.equals("option_0");
-        Toast.makeText(QuizActivity.this, isCorrect ? R.string.toast_correct_answer : R.string.toast_wrong_answer, Toast.LENGTH_LONG).show();
 
         mDB.getQuestionByKey(mCurrentQuestionKey).runTransaction(new Transaction.Handler() {
             @Override
@@ -239,7 +246,9 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
                 if (databaseError == null) {
-                    mDB.removeUserRecentByKey(App.getInstance().uid, mCurrentQuestionKey);
+//                    mDB.removeUserRecentByKey(App.getInstance().uid, mCurrentQuestionKey);
+
+                    onCheckResult(checkedButton, isCorrect);
 
                     if (mQuestions.isEmpty()) {
                         setResult(RESULT_OK);
@@ -252,8 +261,44 @@ public class QuizActivity extends AppCompatActivity {
         });
     }
 
+    private void onCheckResult(RadioButton selected, boolean isCorrect) {
+        if (isCorrect) {
+            selected.setBackgroundResource(R.color.correct);
+            Toast.makeText(QuizActivity.this, R.string.toast_correct_answer, Toast.LENGTH_LONG).show();
+        } else {
+            selected.setBackgroundResource(R.color.wrong);
+
+            for (int i = 0; i < mOptionsRadioGroup.getChildCount(); ++i) {
+                RadioButton currentButton = (RadioButton) mOptionsRadioGroup.getChildAt(i);
+
+                if (currentButton.getTag().equals("option_0")) {
+                    currentButton.setBackgroundResource(R.color.correct);
+                    currentButton.setTextColor(getResources().getColor(android.R.color.white));
+
+                    break;
+                }
+            }
+
+            Toast.makeText(QuizActivity.this, R.string.toast_wrong_answer, Toast.LENGTH_LONG).show();
+        }
+    }
+
     public void onContinueButtonCallback(View view) {
         getNextQuestion();
         mButtonViewFlipper.showNext();
+    }
+
+    public void onOptionSelected(View view) {
+        for (int i = 0; i < mOptionsRadioGroup.getChildCount(); ++i) {
+            RadioButton currentButton = (RadioButton) mOptionsRadioGroup.getChildAt(i);
+
+            if (currentButton.isChecked()) {
+                currentButton.setBackgroundResource(R.color.color_primary);
+                currentButton.setTextColor(getResources().getColor(android.R.color.white));
+            } else {
+                currentButton.setBackgroundResource(R.color.grey_300);
+                currentButton.setTextColor(getResources().getColor(android.R.color.black));
+            }
+        }
     }
 }
