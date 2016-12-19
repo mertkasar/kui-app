@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -44,8 +45,8 @@ public class QuizActivity extends AppCompatActivity {
 
     private int mQuizMode;
     private String mUID;
-    private long mSize;
 
+    private ProgressBar mProgressBar;
     private TextView mTitleTextView;
     private TextView mDescriptionTextView;
     private RadioGroup mOptionsRadioGroup;
@@ -76,6 +77,7 @@ public class QuizActivity extends AppCompatActivity {
 
         mUID = App.getInstance().uid;
 
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mTitleTextView = (TextView) findViewById(R.id.title);
         mDescriptionTextView = (TextView) findViewById(R.id.description);
         mOptionsRadioGroup = (RadioGroup) findViewById(R.id.options);
@@ -134,7 +136,11 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    mSize = dataSnapshot.getChildrenCount();
+                    final long size = dataSnapshot.getChildrenCount();
+                    if (size > 1) {
+                        mProgressBar.setVisibility(View.VISIBLE);
+                        mProgressBar.setMax((int) size);
+                    }
 
                     for (DataSnapshot questionSnap : dataSnapshot.getChildren()) {
                         mDB.getQuestionByKey(questionSnap.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -143,7 +149,7 @@ public class QuizActivity extends AppCompatActivity {
                                 if (dataSnapshot.exists()) {
                                     mQuestions.push(dataSnapshot);
 
-                                    if (mQuestions.size() == mSize) {
+                                    if (mQuestions.size() == size) {
                                         getNextQuestion();
                                     }
                                 }
@@ -170,6 +176,12 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    final long size = dataSnapshot.getChildrenCount();
+                    if (size > 1) {
+                        mProgressBar.setVisibility(View.VISIBLE);
+                        mProgressBar.setMax((int) size);
+                    }
+
                     for (DataSnapshot questionSnap : dataSnapshot.getChildren())
                         mQuestions.push(questionSnap);
 
@@ -262,11 +274,6 @@ public class QuizActivity extends AppCompatActivity {
 
                     onCheckResult(checkedButton, isCorrect);
 
-                    if (mQuestions.isEmpty()) {
-                        setResult(RESULT_OK);
-                        finish();
-                    }
-
                     mButtonViewFlipper.showNext();
                 }
             }
@@ -274,6 +281,8 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void onCheckResult(RadioButton selected, boolean isCorrect) {
+        mProgressBar.setProgress(mProgressBar.getProgress() + 1);
+
         if (isCorrect) {
             selected.setBackgroundResource(R.color.correct);
             Toast.makeText(QuizActivity.this, R.string.toast_correct_answer, Toast.LENGTH_LONG).show();
@@ -296,6 +305,12 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     public void onContinueButtonCallback(View view) {
+        if (mQuestions.isEmpty()) {
+            setResult(RESULT_OK);
+            finish();
+            return;
+        }
+
         getNextQuestion();
         mButtonViewFlipper.showNext();
     }
