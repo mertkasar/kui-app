@@ -1,8 +1,9 @@
 package com.mertkasar.kui.activities;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -54,6 +55,17 @@ public class QuizActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDefaultDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_close_dark);
+        }
 
         mDB = Database.getInstance();
 
@@ -296,7 +308,7 @@ public class QuizActivity extends AppCompatActivity {
                 currentButton.setBackgroundResource(R.color.color_primary);
                 currentButton.setTextColor(getResources().getColor(android.R.color.white));
             } else {
-                currentButton.setBackgroundResource(R.color.grey_300);
+                currentButton.setBackgroundResource(android.R.color.white);
                 currentButton.setTextColor(getResources().getColor(android.R.color.black));
             }
         }

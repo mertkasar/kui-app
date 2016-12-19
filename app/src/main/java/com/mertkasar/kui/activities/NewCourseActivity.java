@@ -39,7 +39,7 @@ public class NewCourseActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
-            actionBar.setHomeAsUpIndicator(android.R.drawable.ic_menu_close_clear_cancel);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_close_light);
         }
 
         title = (TextView) findViewById(R.id.title_edit_text);

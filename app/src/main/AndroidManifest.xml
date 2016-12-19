@@ -29,7 +29,8 @@
             android:parentActivityName=".activities.CourseDetailActivity" />
         <activity
             android:name=".activities.QuizActivity"
-            android:parentActivityName=".activities.DemoActivity" />
+            android:parentActivityName=".activities.DemoActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/title_activity_main"

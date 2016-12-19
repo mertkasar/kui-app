@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/color_primary"
+    android:elevation="@dimen/item_elevation"
     android:onClick="onCheckButtonCallback"
     android:text="@string/button_activity_quiz_check"
     android:textColor="@android:color/white" />
