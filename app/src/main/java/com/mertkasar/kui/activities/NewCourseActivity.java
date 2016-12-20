@@ -1,5 +1,7 @@
 package com.mertkasar.kui.activities;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -9,12 +11,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.mertkasar.kui.R;
 import com.mertkasar.kui.core.Database;
 import com.mertkasar.kui.models.Course;
+
+import java.util.HashMap;
 
 public class NewCourseActivity extends AppCompatActivity {
     public static final String TAG = NewCourseActivity.class.getSimpleName();
@@ -24,6 +29,8 @@ public class NewCourseActivity extends AppCompatActivity {
     private TextView title;
     private TextView description;
     private Switch publicSwitch;
+
+    private ProgressDialog mCreatingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,22 +74,36 @@ public class NewCourseActivity extends AppCompatActivity {
     }
 
     private void createNewCourse() {
+        mCreatingDialog = ProgressDialog.show(NewCourseActivity.this, "", getString(R.string.dialog_message_creating), true);
+
+        Database db = Database.getInstance();
+
+        final String courseKey = db.getCourses().push().getKey();
+
         Course newCourse = new Course(userKey, title.getText().toString(), description.getText().toString(), publicSwitch.isChecked());
 
-        Database.getInstance().createCourse(newCourse).addOnSuccessListener(new OnSuccessListener<Void>() {
+        HashMap<String, Object> updateBatch = new HashMap<>();
+
+        updateBatch.put("courses/" + courseKey, newCourse);
+        updateBatch.put("user_courses/" + newCourse.owner + "/" + courseKey, true);
+
+        db.getDB().updateChildren(updateBatch).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                setResult(RESULT_OK);
-                finish();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, e.toString());
-
-                setResult(RESULT_CANCELED);
-                finish();
+                onFinish(courseKey);
             }
         });
+    }
+
+    private void onFinish(String createdCourseKey) {
+        Intent intent = new Intent(this, CourseDetailActivity.class);
+        intent.putExtra(CourseDetailActivity.EXTRA_COURSE_KEY, createdCourseKey);
+        startActivity(intent);
+
+        Toast.makeText(NewCourseActivity.this, R.string.toast_create_course_success, Toast.LENGTH_SHORT).show();
+
+        mCreatingDialog.dismiss();
+
+        finish();
     }
 }

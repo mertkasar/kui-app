@@ -1,6 +1,7 @@
 package com.mertkasar.kui.adapters;
 
 import android.content.Context;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -22,7 +23,7 @@ public class CoursesPagerAdapter extends FragmentPagerAdapter {
 
     private Context mContext;
 
-    private List<Fragment> mFragments;
+    private List<CourseListFragment> mFragments;
 
     public CoursesPagerAdapter(FragmentManager fragmentManager, Context context) {
         super(fragmentManager);
@@ -50,7 +51,7 @@ public class CoursesPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        Fragment createdFragment = (Fragment) super.instantiateItem(container, position);
+        CourseListFragment createdFragment = (CourseListFragment) super.instantiateItem(container, position);
 
         mFragments.add(position, createdFragment);
 
@@ -77,7 +78,7 @@ public class CoursesPagerAdapter extends FragmentPagerAdapter {
         return null;
     }
 
-    public Fragment getFragment(int position) {
+    public CourseListFragment getFragment(int position) {
         return mFragments.get(position);
     }
 }

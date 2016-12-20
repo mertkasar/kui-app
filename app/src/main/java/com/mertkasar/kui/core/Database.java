@@ -62,6 +62,10 @@ public final class Database {
         Log.d(TAG, "Database: Created");
     }
 
+    public DatabaseReference getDB() {
+        return refDB;
+    }
+
     public Task<Void> createUser(final String uid, final User user) {
         return refUsers.child(uid).setValue(user);
     }
@@ -86,7 +90,7 @@ public final class Database {
         return refUserRecent.child(key);
     }
 
-    public Task<Void> removeUserRecentByKey(final String uid, final String questionKey){
+    public Task<Void> removeUserRecentByKey(final String uid, final String questionKey) {
         return refUserRecent.child(uid).child(questionKey).removeValue();
     }
 
@@ -167,6 +171,7 @@ public final class Database {
 
         return task;
     }
+
 
     public Task<Void> createCourse(final Course course) {
         String courseKey = refCourses.push().getKey();
