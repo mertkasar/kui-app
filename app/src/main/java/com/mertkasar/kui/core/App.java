@@ -18,6 +18,7 @@ public class App extends Application {
 
         instance = this;
         uid = "-AbC68u";
+//        uid = "-T68ucHg";
 
         Log.d(TAG, "onCreate: App created");
     }

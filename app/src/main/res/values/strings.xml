@@ -56,4 +56,10 @@
     <string name="hello_blank_fragment">Hello</string>
     <string name="fragment_dashboard">Dashboard</string>
     <string name="dialog_message_creating">Creating</string>
+    <string name="button_subscribe">Subscribe</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="dialog_message_subscribe">Enter Your Enroll Code</string>
+    <string name="dialog_title_subscribe">Subscribe</string>
+    <string name="dialog_loading">Loading</string>
+    <string name="error_course_not_found">Course not found!</string>
 </resources>

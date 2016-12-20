@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.google.firebase.database.DataSnapshot;
@@ -96,8 +97,14 @@ public class CourseDetailActivity extends AppCompatActivity {
         mDB.getCourseByKey(mCourseKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Course course = dataSnapshot.getValue(Course.class);
-                bindLayout(course);
+                if (dataSnapshot.exists()) {
+                    Course course = dataSnapshot.getValue(Course.class);
+                    bindLayout(course);
+                } else {
+                    Log.d(TAG, "Course not found: " + dataSnapshot.toString());
+                    Toast.makeText(CourseDetailActivity.this, R.string.error_course_not_found, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
 
             @Override
