@@ -11,12 +11,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 import com.mertkasar.kui.models.Answer;
 import com.mertkasar.kui.models.Course;
 import com.mertkasar.kui.models.Question;
 import com.mertkasar.kui.models.User;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public final class Database {
     public static final String TAG = Database.class.getSimpleName();
@@ -44,7 +46,7 @@ public final class Database {
 
     private Database() {
         firebaseDB = FirebaseDatabase.getInstance();
-        //firebaseDB.setPersistenceEnabled(true);
+        firebaseDB.setPersistenceEnabled(true);
 
         refDB = firebaseDB.getReference();
 
@@ -197,12 +199,16 @@ public final class Database {
         return refCourses.orderByChild("created_at").equalTo(createdAt);
     }
 
+    public DatabaseReference getCourseSubscribers(final String courseKey) {
+        return refCourseSubscribers.child(courseKey);
+    }
+
     public Query getSubscribedCourse(final String userKey, final String courseKey) {
         return refUserSubscriptions.child(userKey).child(courseKey);
     }
 
     public Task<Void> createQuestion(final String courseKey, final Question question) {
-        String questionKey = refQuestions.child(courseKey).push().getKey();
+        final String questionKey = refQuestions.child(courseKey).push().getKey();
 
         HashMap<String, Object> updateBatch = new HashMap<>();
 
@@ -238,6 +244,33 @@ public final class Database {
                         Log.d(TAG, "onComplete: Course updated. Error:" + databaseError);
                     }
                 });
+            }
+        });
+
+        // Update recent questions collection
+        task.addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                getCourseSubscribers(courseKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            HashMap<String, Object> updateBatch = new HashMap<>();
+
+                            for (DataSnapshot user : dataSnapshot.getChildren()) {
+                                updateBatch.put("user_recent/" + user.getKey() + "/" + questionKey, true);
+                            }
+
+                            getDB().updateChildren(updateBatch);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
             }
         });
 
