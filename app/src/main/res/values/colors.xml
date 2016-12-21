@@ -5,7 +5,7 @@
     <color name="color_accent">#FF4081</color>
 
     <color name="grey_100">#F5F5F5</color>
-    <color name="empty_view_color">#BDBDBD</color>
+    <color name="empty_view_color">#9E9E9E</color>
     <color name="wrong">#F44336</color>
     <color name="correct">#4CAF50</color>
 </resources>

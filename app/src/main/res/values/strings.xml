@@ -40,6 +40,7 @@
     <string name="button_activity_quiz_check">Check</string>
     <string name="button_activity_quiz_checking">Checking…</string>
     <string name="button_activity_quiz_continue">Continue</string>
+    <string name="button_dashboard_browse">Browse new courses!</string>
 
     <string name="section_format">Hello World from section: %1$d</string>
 
@@ -63,7 +64,7 @@
     <string name="dialog_loading">Loading</string>
     <string name="error_course_not_found">Course not found!</string>
     <string name="dialog_message_sunscribing">Subscribing</string>
-    <string name="empty_dashboard_message">There are no recent questions.\nBrowse new courses!</string>
+    <string name="empty_dashboard_message">There are no recent questions.</string>
     <string name="empty_courses_subscribed">You are not subscribed to any course yet.</string>
     <string name="empty_courses_created">You are not created any courses yet.</string>
     <string name="empty_courses_browse">There no browsable courses.</string>

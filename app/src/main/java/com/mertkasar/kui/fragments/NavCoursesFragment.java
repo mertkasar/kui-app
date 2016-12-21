@@ -32,6 +32,8 @@ import com.mertkasar.kui.core.Database;
 public class NavCoursesFragment extends Fragment {
     public static final String TAG = NavCoursesFragment.class.getSimpleName();
 
+    private static final String ARG_PREFERRED_TAB = "preferred-tab";
+
     private CoursesPagerAdapter mCoursesPagerAdapter;
 
     private FloatingActionButton mSharedFab;
@@ -42,14 +44,23 @@ public class NavCoursesFragment extends Fragment {
     private App mApp;
     private Database mDB;
 
+    @SuppressWarnings("unused")
+    public static NavCoursesFragment newInstance(int preferredTab) {
+        NavCoursesFragment fragment = new NavCoursesFragment();
+        Bundle args = new Bundle();
+
+        args.putInt(ARG_PREFERRED_TAB, preferredTab);
+
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mApp = App.getInstance();
         mDB = Database.getInstance();
-
-        mCoursesPagerAdapter = new CoursesPagerAdapter(getChildFragmentManager(), getActivity());
 
         final EditText editText = new EditText(getActivity());
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
@@ -155,7 +166,10 @@ public class NavCoursesFragment extends Fragment {
         mSharedFab.hide();
 
         mViewPager = (ViewPager) view.findViewById(R.id.container);
+
+        mCoursesPagerAdapter = new CoursesPagerAdapter(getChildFragmentManager(), getActivity());
         mViewPager.setAdapter(mCoursesPagerAdapter);
+
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             boolean isDragged = false;
@@ -197,10 +211,17 @@ public class NavCoursesFragment extends Fragment {
             }
         });
 
-        handleFAB();
-
         TabLayout tabs = (TabLayout) view.findViewById(R.id.tabs);
         tabs.setupWithViewPager(mViewPager);
+
+        Bundle args = getArguments();
+        if (args != null) {
+            int preferredTab = args.getInt(ARG_PREFERRED_TAB);
+            mViewPager.setOffscreenPageLimit(2);
+            mViewPager.setCurrentItem(preferredTab);
+        }
+
+        handleFAB();
     }
 
     private void handleFAB() {

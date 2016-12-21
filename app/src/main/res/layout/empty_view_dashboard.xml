@@ -4,12 +4,27 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/empty_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/text_margin"
         android:drawableTop="@drawable/ic_empty_dashboard"
         android:text="@string/empty_dashboard_message"
         android:textAlignment="center"
         android:textColor="@color/empty_view_color" />
+
+    <Button
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/empty_text"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button_frame"
+        android:onClick="onBrowseCoursesButtonCallback"
+        android:paddingEnd="@dimen/text_margin"
+        android:paddingStart="@dimen/text_margin"
+        android:text="@string/button_dashboard_browse"
+        android:textColor="@color/color_primary" />
 
 </RelativeLayout>

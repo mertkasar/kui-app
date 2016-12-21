@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class CourseDetailActivity extends AppCompatActivity {
     public static final String TAG = CourseDetailActivity.class.getSimpleName();
 
-    public static final String EXTRA_COURSE_KEY = "course_key";
+    public static final String EXTRA_COURSE_KEY = "course-key";
 
     private String mCourseKey;
 
