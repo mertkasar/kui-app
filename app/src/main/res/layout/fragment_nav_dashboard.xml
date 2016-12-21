@@ -6,11 +6,25 @@
     android:layout_height="match_parent"
     tools:context="com.mertkasar.kui.fragments.NavDashboardFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recent_questions_list"
+    <ViewFlipper
+        android:id="@+id/view_flipper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/item_question_list" />
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/loading_view"
+            layout="@layout/content_loading" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_question_list" />
+
+        <include
+            android:id="@+id/empty_view"
+            layout="@layout/empty_view_dashboard" />
+    </ViewFlipper>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

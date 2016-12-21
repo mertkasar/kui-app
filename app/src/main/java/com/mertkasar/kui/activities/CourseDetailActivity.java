@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 import android.widget.ViewSwitcher;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,7 +25,6 @@ import com.mertkasar.kui.adapters.QuestionRecyclerViewAdapter;
 import com.mertkasar.kui.core.App;
 import com.mertkasar.kui.core.Database;
 import com.mertkasar.kui.models.Course;
-import com.mertkasar.kui.models.Question;
 import com.mertkasar.kui.models.User;
 
 import java.util.ArrayList;
@@ -37,6 +37,7 @@ public class CourseDetailActivity extends AppCompatActivity {
     private String mCourseKey;
 
     private ViewSwitcher mViewSwitcher;
+    private ViewFlipper mQuestionsViewFlipper;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
 
     private FloatingActionButton mFAB;
@@ -67,6 +68,8 @@ public class CourseDetailActivity extends AppCompatActivity {
         }
 
         mViewSwitcher = (ViewSwitcher) findViewById(R.id.view_switcher_main);
+        mQuestionsViewFlipper = (ViewFlipper) findViewById(R.id.view_flipper_questions);
+
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
 
         mCourseKey = getIntent().getStringExtra(EXTRA_COURSE_KEY);
@@ -218,13 +221,19 @@ public class CourseDetailActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    final long size = dataSnapshot.getChildrenCount();
+
                     for (DataSnapshot courseSnap : dataSnapshot.getChildren()) {
                         mDB.getQuestionByKey(courseSnap.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
                                     mDataSet.add(dataSnapshot);
-                                    mAdapter.notifyDataSetChanged();
+
+                                    if (mDataSet.size() == size) {
+                                        mAdapter.notifyDataSetChanged();
+                                        mQuestionsViewFlipper.showNext();
+                                    }
                                 }
                             }
 
@@ -234,6 +243,8 @@ public class CourseDetailActivity extends AppCompatActivity {
                             }
                         });
                     }
+                } else {
+                    mQuestionsViewFlipper.setDisplayedChild(2);
                 }
             }
 

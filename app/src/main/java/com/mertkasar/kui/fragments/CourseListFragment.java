@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,6 +41,9 @@ public class CourseListFragment extends Fragment {
 
     private Database mDB;
     private DatabaseReference mDBRef;
+
+    private ViewFlipper mViewFlipper;
+    private TextView mEmptyText;
 
     public CourseListFragment() {
     }
@@ -80,8 +85,6 @@ public class CourseListFragment extends Fragment {
             default:
                 throw new IllegalArgumentException("Undefined display mode!");
         }
-
-        getItems();
     }
 
     @Override
@@ -94,6 +97,9 @@ public class CourseListFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mViewFlipper = (ViewFlipper) view.findViewById(R.id.view_flipper);
+        mEmptyText = (TextView) view.findViewById(R.id.empty_text);
+
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.course_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), layoutManager.getOrientation());
@@ -101,6 +107,8 @@ public class CourseListFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(mAdapter);
+
+        refreshItems();
     }
 
     public void refreshItems() {
@@ -115,13 +123,19 @@ public class CourseListFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    final long size = dataSnapshot.getChildrenCount();
+
                     for (DataSnapshot courseSnap : dataSnapshot.getChildren()) {
                         mDB.getCourseByKey(courseSnap.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
                                     mCourseList.add(dataSnapshot);
-                                    mAdapter.notifyDataSetChanged();
+
+                                    if (mCourseList.size() == size) {
+                                        mAdapter.notifyDataSetChanged();
+                                        mViewFlipper.showNext();
+                                    }
                                 }
                             }
 
@@ -131,6 +145,22 @@ public class CourseListFragment extends Fragment {
                             }
                         });
                     }
+                } else {
+                    switch (mDisplayMode) {
+                        case MODE_SUBSCRIBED:
+                            mEmptyText.setText(R.string.empty_courses_subscribed);
+                            break;
+                        case MODE_CREATED:
+                            mEmptyText.setText(R.string.empty_courses_created);
+                            break;
+                        case MODE_BROWSE:
+                            mEmptyText.setText(R.string.empty_courses_browse);
+                            break;
+                        default:
+                            throw new IllegalArgumentException("Undefined display mode!");
+                    }
+
+                    mViewFlipper.setDisplayedChild(2);
                 }
             }
 

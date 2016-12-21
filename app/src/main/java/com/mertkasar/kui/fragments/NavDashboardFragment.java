@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ViewFlipper;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,6 +37,7 @@ public class NavDashboardFragment extends Fragment {
     private QuestionRecyclerViewAdapter mAdapter;
 
     private FloatingActionButton mFAB;
+    private ViewFlipper mViewFlipper;
 
     public NavDashboardFragment() {
     }
@@ -66,6 +68,8 @@ public class NavDashboardFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Dashboard");
 
+        mViewFlipper = (ViewFlipper) view.findViewById(R.id.view_flipper);
+
         mFAB = (FloatingActionButton) view.findViewById(R.id.fab);
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +81,7 @@ public class NavDashboardFragment extends Fragment {
         });
         mFAB.hide();
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recent_questions_list);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), layoutManager.getOrientation());
 
@@ -110,6 +114,8 @@ public class NavDashboardFragment extends Fragment {
                                     if (mQuestionList.size() == mSize) {
                                         mAdapter.notifyDataSetChanged();
                                         mFAB.show();
+
+                                        mViewFlipper.showNext();
                                     }
                                 }
                             }
@@ -119,6 +125,10 @@ public class NavDashboardFragment extends Fragment {
 
                             }
                         });
+                    }
+                } else {
+                    if (mSize == 0) {
+                        mViewFlipper.setDisplayedChild(2);
                     }
                 }
             }

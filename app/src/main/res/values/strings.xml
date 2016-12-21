@@ -63,4 +63,9 @@
     <string name="dialog_loading">Loading</string>
     <string name="error_course_not_found">Course not found!</string>
     <string name="dialog_message_sunscribing">Subscribing</string>
+    <string name="empty_dashboard_message">There are no recent questions.\nBrowse new courses!</string>
+    <string name="empty_courses_subscribed">You are not subscribed to any course yet.</string>
+    <string name="empty_courses_created">You are not created any courses yet.</string>
+    <string name="empty_courses_browse">There no browsable courses.</string>
+    <string name="empty_questions_message">There are no questions for this course yet.</string>
 </resources>

@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import com.mertkasar.kui.R;
 import com.mertkasar.kui.fragments.NavCoursesFragment;
 import com.mertkasar.kui.fragments.NavDashboardFragment;
-import com.mertkasar.kui.fragments.NavSettingsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -61,10 +60,6 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.nav_courses:
                 displayFragment(new NavCoursesFragment());
-                break;
-
-            case R.id.nav_settings:
-                displayFragment(new NavSettingsFragment());
                 break;
 
             case R.id.nav_logout:
