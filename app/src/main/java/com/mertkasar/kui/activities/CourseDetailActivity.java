@@ -8,8 +8,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +39,7 @@ public class CourseDetailActivity extends AppCompatActivity {
     private static final int RC_NEW_QUESTION = 1;
 
     private String mCourseKey;
+    private String mEnrollCode;
 
     private ViewSwitcher mViewSwitcher;
     private ViewFlipper mQuestionsViewFlipper;
@@ -97,6 +101,33 @@ public class CourseDetailActivity extends AppCompatActivity {
 
         getCourse();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_course_detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_share:
+                Intent sendIntent = new Intent();
+
+                sendIntent.setAction(Intent.ACTION_SEND);
+                String shareMessage = String.format(getString(R.string.content_share), mEnrollCode);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                sendIntent.setType("text/plain");
+
+                startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.chooser_share)));
+
+                break;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -262,11 +293,13 @@ public class CourseDetailActivity extends AppCompatActivity {
     private void bindLayout(Course course) {
         getDisplayMode(mCourseKey, course);
 
+        mEnrollCode = course.getSubsKey();
+
         mCollapsingToolbarLayout.setTitleEnabled(true);
         mCollapsingToolbarLayout.setTitle(course.title);
 
         mDescriptionTextView.setText(course.description);
-        mSubtitleTextView.setText("Enroll code: " + course.getSubsKey());
+        mSubtitleTextView.setText("Enroll code: " + mEnrollCode);
         mQuestionCountTextView.setText(course.question_count.toString());
         mSubscriberCountTextView.setText(course.subscriber_count.toString());
 

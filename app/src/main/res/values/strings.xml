@@ -69,4 +69,7 @@
     <string name="empty_courses_created">You are not created any courses yet.</string>
     <string name="empty_courses_browse">There no browsable courses.</string>
     <string name="empty_questions_message">There are no questions for this course yet.</string>
+    <string name="action_share">Share</string>
+    <string name="chooser_share">Share</string>
+    <string name="content_share" formatted="false">Check out this awesome quiz on Kui! Code: %s</string>
 </resources>
