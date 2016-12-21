@@ -1,5 +1,6 @@
 package com.mertkasar.kui.activities;
 
+import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,8 @@ import java.util.HashMap;
 public class NewQuestionActivity extends AppCompatActivity {
     public static final String TAG = NewQuestionActivity.class.getSimpleName();
 
+    public static final String EXTRA_COURSE_KEY = "course-key";
+
     private String mCourseKey;
 
     private EditText mTitle;
@@ -34,7 +37,7 @@ public class NewQuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_question);
 
-        mCourseKey = getIntent().getStringExtra("EXTRA_COURSE_KEY");
+        mCourseKey = getIntent().getStringExtra(EXTRA_COURSE_KEY);
         if (mCourseKey == null) {
             throw new IllegalArgumentException("Must pass EXTRA_COURSE_KEY");
         }
@@ -74,6 +77,8 @@ public class NewQuestionActivity extends AppCompatActivity {
     }
 
     private void createNewQuestion() {
+        final ProgressDialog postingDialog = ProgressDialog.show(this, "", getString(R.string.dialog_message_creating), true);
+
         HashMap<String, String> options = new HashMap<>(4);
         options.put("option_0", mOptionCorrect.getText().toString());
         options.put("option_1", mOption1.getText().toString());
@@ -90,6 +95,7 @@ public class NewQuestionActivity extends AppCompatActivity {
         Database.getInstance().createQuestion(mCourseKey, newQuestion).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                postingDialog.dismiss();
                 setResult(RESULT_OK);
                 finish();
             }
@@ -97,7 +103,7 @@ public class NewQuestionActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.e(TAG, e.toString());
-
+                postingDialog.dismiss();
                 setResult(RESULT_CANCELED);
                 finish();
             }

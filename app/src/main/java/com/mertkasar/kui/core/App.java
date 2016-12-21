@@ -17,9 +17,9 @@ public class App extends Application {
         super.onCreate();
 
         instance = this;
-        //uid = "-AbC68u";
-//        uid = "-T68ucHg";
-        uid = "-BcA97f";
+        uid = "-AbC68u";
+        //uid = "-T68ucHg";
+        //uid = "-BcA97f";
 
         Log.d(TAG, "onCreate: App created");
     }

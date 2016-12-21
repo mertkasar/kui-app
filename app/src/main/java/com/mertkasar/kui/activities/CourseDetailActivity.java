@@ -33,6 +33,7 @@ public class CourseDetailActivity extends AppCompatActivity {
     public static final String TAG = CourseDetailActivity.class.getSimpleName();
 
     public static final String EXTRA_COURSE_KEY = "course-key";
+    private static final int RC_NEW_QUESTION = 1;
 
     private String mCourseKey;
 
@@ -98,6 +99,67 @@ public class CourseDetailActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case RC_NEW_QUESTION:
+                if (resultCode == RESULT_OK) {
+                    refreshQuestions();
+                    int currentQuestionCount = Integer.parseInt(mQuestionCountTextView.getText().toString());
+                    mQuestionCountTextView.setText(String.valueOf(currentQuestionCount + 1));
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void refreshQuestions() {
+        mQuestionsViewFlipper.setDisplayedChild(0);
+
+        mDataSet.clear();
+        mAdapter.notifyDataSetChanged();
+
+        mDB.getQuestionsByCourseKey(mCourseKey).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    final long size = dataSnapshot.getChildrenCount();
+
+                    for (DataSnapshot courseSnap : dataSnapshot.getChildren()) {
+                        mDB.getQuestionByKey(courseSnap.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    mDataSet.add(dataSnapshot);
+
+                                    if (mDataSet.size() == size) {
+                                        mAdapter.notifyDataSetChanged();
+                                        mQuestionsViewFlipper.showNext();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                } else {
+                    mQuestionsViewFlipper.setDisplayedChild(2);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void getDisplayMode(String key, Course course) {
         if (mApp.uid.equals(course.owner)) {
             onDisplayModeOwner();
@@ -142,8 +204,8 @@ public class CourseDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(CourseDetailActivity.this, NewQuestionActivity.class);
-                intent.putExtra("EXTRA_USER_KEY", App.getInstance().uid);
-                startActivity(intent);
+                intent.putExtra(NewQuestionActivity.EXTRA_COURSE_KEY, mCourseKey);
+                startActivityForResult(intent, RC_NEW_QUESTION);
             }
         });
 
@@ -163,6 +225,10 @@ public class CourseDetailActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         onDisplayModeSubscriber();
+
+                        int currentQuestionCount = Integer.parseInt(mSubscriberCountTextView.getText().toString());
+                        mSubscriberCountTextView.setText(String.valueOf(currentQuestionCount + 1));
+
                         subscribeDialog.dismiss();
                     }
                 });
@@ -217,42 +283,7 @@ public class CourseDetailActivity extends AppCompatActivity {
             }
         });
 
-        mDB.getQuestionsByCourseKey(mCourseKey).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    final long size = dataSnapshot.getChildrenCount();
-
-                    for (DataSnapshot courseSnap : dataSnapshot.getChildren()) {
-                        mDB.getQuestionByKey(courseSnap.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.exists()) {
-                                    mDataSet.add(dataSnapshot);
-
-                                    if (mDataSet.size() == size) {
-                                        mAdapter.notifyDataSetChanged();
-                                        mQuestionsViewFlipper.showNext();
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                } else {
-                    mQuestionsViewFlipper.setDisplayedChild(2);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        refreshQuestions();
 
         mViewSwitcher.showNext();
     }
