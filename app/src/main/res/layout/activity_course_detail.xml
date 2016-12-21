@@ -6,15 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".activities.CourseDetailActivity">
 
-    <android.support.design.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        tools:context="com.mertkasar.kui.activities.CourseDetailActivity"
-        tools:visibility="gone">
-
-        <include layout="@layout/content_loading" />
-    </android.support.design.widget.CoordinatorLayout>
+    <include layout="@layout/content_loading" />
 
     <include layout="@layout/master_course_detail" />
 </ViewSwitcher>

@@ -62,4 +62,5 @@
     <string name="dialog_title_subscribe">Subscribe</string>
     <string name="dialog_loading">Loading</string>
     <string name="error_course_not_found">Course not found!</string>
+    <string name="dialog_message_sunscribing">Subscribing</string>
 </resources>

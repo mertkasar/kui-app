@@ -23,15 +23,6 @@
             app:expandedTitleMarginBottom="64dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <ImageView
-                android:layout_width="128dp"
-                android:layout_height="128dp"
-                android:layout_gravity="end|top"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="8dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_assignment_24dp" />
-
             <TextView
                 android:id="@+id/toolbar_subtitle"
                 android:layout_width="match_parent"
@@ -53,15 +44,16 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
+    <include
+        android:id="@+id/container"
+        layout="@layout/content_course_detail" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
-
-    <include layout="@layout/content_course_detail" />
+        app:layout_anchor="@id/container"
+        app:layout_anchorGravity="bottom|right|end" />
 
 </android.support.design.widget.CoordinatorLayout>

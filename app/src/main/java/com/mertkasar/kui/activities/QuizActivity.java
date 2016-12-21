@@ -14,6 +14,7 @@ import android.widget.ViewFlipper;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
@@ -32,10 +33,12 @@ public class QuizActivity extends AppCompatActivity {
 
     public static final String EXTRA_QUIZ_MODE = "quiz_mode";
     public static final String EXTRA_QUESTION_KEY = "question_key";
+    public static final String EXTRA_COURSE_KEY = "course_key";
 
     public static final int QUIZ_MODE_SINGLE = 1;
     public static final int QUIZ_MODE_RECENT = 2;
     public static final int QUIZ_MODE_ALL = 3;
+    public static final int QUIZ_MODE_COURSE = 4;
 
     Database mDB;
 
@@ -100,6 +103,10 @@ public class QuizActivity extends AppCompatActivity {
 
             case QUIZ_MODE_ALL:
                 onQuizModeAll();
+                break;
+
+            case QUIZ_MODE_COURSE:
+                onQuizModeCourse();
                 break;
 
             default:
@@ -186,6 +193,52 @@ public class QuizActivity extends AppCompatActivity {
                         mQuestions.push(questionSnap);
 
                     getNextQuestion();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void onQuizModeCourse() {
+        final String COURSE_KEY = getIntent().getStringExtra(EXTRA_COURSE_KEY);
+
+        if (COURSE_KEY == null) {
+            throw new IllegalArgumentException("Must pass " + EXTRA_COURSE_KEY);
+        }
+
+        mDB.getQuestionsByCourseKey(COURSE_KEY).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    final long size = dataSnapshot.getChildrenCount();
+                    if (size > 1) {
+                        mProgressBar.setVisibility(View.VISIBLE);
+                        mProgressBar.setMax((int) size);
+                    }
+
+                    for (DataSnapshot questionSnap : dataSnapshot.getChildren()) {
+                        mDB.getQuestionByKey(questionSnap.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    mQuestions.push(dataSnapshot);
+
+                                    if (mQuestions.size() == size) {
+                                        getNextQuestion();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
                 }
             }
 

@@ -65,7 +65,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="LinearLayoutManager"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:listitem="@layout/item_question_list" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
