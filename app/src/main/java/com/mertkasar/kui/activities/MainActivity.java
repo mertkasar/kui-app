@@ -1,5 +1,6 @@
 package com.mertkasar.kui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.mertkasar.kui.R;
+import com.mertkasar.kui.core.App;
 import com.mertkasar.kui.fragments.NavCoursesFragment;
 import com.mertkasar.kui.fragments.NavDashboardFragment;
 
@@ -64,6 +66,12 @@ public class MainActivity extends AppCompatActivity implements
                 break;
 
             case R.id.nav_logout:
+                App.getInstance().auth.signOut();
+
+                Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                startActivity(intent);
+
+                finish();
                 break;
         }
 

@@ -10,7 +10,7 @@ import com.mertkasar.kui.R;
 public class SplashActivity extends AppCompatActivity {
     public static final String TAG = SplashActivity.class.getSimpleName();
 
-    public static final int DELAY = 3000;
+    public static final int DELAY = 1500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +21,7 @@ public class SplashActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         }, DELAY);

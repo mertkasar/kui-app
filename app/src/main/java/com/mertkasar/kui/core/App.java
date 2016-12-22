@@ -5,10 +5,14 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class App extends Application {
     public static final String TAG = App.class.getSimpleName();
 
     public static App instance;
+
+    public FirebaseAuth auth;
 
     public String uid;
 
@@ -17,6 +21,9 @@ public class App extends Application {
         super.onCreate();
 
         instance = this;
+
+        auth = FirebaseAuth.getInstance();
+
         uid = "-AbC68u";
         //uid = "-T68ucHg";
         //uid = "-BcA97f";
@@ -29,6 +36,7 @@ public class App extends Application {
         Log.d(TAG, "onTerminate: App terminated");
         super.onTerminate();
     }
+
 
     public static App getInstance() {
         return instance;
