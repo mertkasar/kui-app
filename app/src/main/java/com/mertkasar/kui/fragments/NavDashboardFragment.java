@@ -49,7 +49,7 @@ public class NavDashboardFragment extends Fragment {
         mApp = App.getInstance();
         mDB = Database.getInstance();
 
-        mUserKey = mApp.uid;
+        mUserKey = mApp.getUID();
 
         mQuestionList = new ArrayList<>();
         mAdapter = new QuestionRecyclerViewAdapter(mQuestionList, getActivity());

@@ -78,7 +78,7 @@ public class QuizActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Must pass " + EXTRA_QUIZ_MODE);
         }
 
-        mUID = App.getInstance().uid;
+        mUID = App.getInstance().getUID();
 
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mTitleTextView = (TextView) findViewById(R.id.title);
@@ -323,7 +323,7 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
                 if (databaseError == null) {
-//                    mDB.removeUserRecentByKey(App.getInstance().uid, mCurrentQuestionKey);
+                    mDB.removeUserRecentByKey(mUID, mCurrentQuestionKey);
 
                     onCheckResult(checkedButton, isCorrect);
 

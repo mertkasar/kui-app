@@ -192,10 +192,12 @@ public class CourseDetailActivity extends AppCompatActivity {
     }
 
     private void getDisplayMode(String key, Course course) {
-        if (mApp.uid.equals(course.owner)) {
+        final String uid = mApp.getUID();
+
+        if (uid.equals(course.owner)) {
             onDisplayModeOwner();
         } else {
-            mDB.getSubscribedCourse(mApp.uid, key).addListenerForSingleValueEvent(new ValueEventListener() {
+            mDB.getSubscribedCourse(uid, key).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists())
@@ -252,7 +254,7 @@ public class CourseDetailActivity extends AppCompatActivity {
 
                 final ProgressDialog subscribeDialog = ProgressDialog.show(CourseDetailActivity.this, "", getString(R.string.dialog_message_sunscribing), true);
 
-                mDB.subscribeUser(mApp.uid, mCourseKey).addOnSuccessListener(new OnSuccessListener<Void>() {
+                mDB.subscribeUser(mApp.getUID(), mCourseKey).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         onDisplayModeSubscriber();

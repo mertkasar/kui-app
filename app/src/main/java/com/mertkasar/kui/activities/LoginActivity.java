@@ -13,12 +13,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.mertkasar.kui.R;
 import com.mertkasar.kui.core.App;
+import com.mertkasar.kui.core.Database;
+import com.mertkasar.kui.models.User;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
@@ -44,12 +47,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
+
                 if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    mApp.user = user;
                     onLoginSuccess();
-                } else {
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
             }
         };
@@ -123,6 +124,21 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
+                FirebaseUser firebaseUser = mApp.auth.getCurrentUser();
+
+                if (firebaseUser != null) {
+                    final String uid = firebaseUser.getUid();
+                    final User user = new User(firebaseUser);
+
+                    user.name = data.getStringExtra("name");
+
+                    Database.getInstance().createUser(uid, user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "User " + user.email + " created with UID: " + uid);
+                        }
+                    });
+                }
             }
         }
     }

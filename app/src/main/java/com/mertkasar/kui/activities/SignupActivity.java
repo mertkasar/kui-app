@@ -1,6 +1,7 @@
 package com.mertkasar.kui.activities;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -70,9 +71,9 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
 
-        String name = mNameText.getText().toString();
-        String email = mEmailText.getText().toString();
-        String password = mPasswordText.getText().toString();
+        final String name = mNameText.getText().toString();
+        final String email = mEmailText.getText().toString();
+        final String password = mPasswordText.getText().toString();
 
         // TODO: Implement your own signup logic here.
 
@@ -82,7 +83,7 @@ public class SignupActivity extends AppCompatActivity {
                 progressDialog.dismiss();
 
                 if (task.isSuccessful()) {
-                    onSignupSuccess();
+                    onSignupSuccess(name);
                 } else {
                     onSignupFailed();
                 }
@@ -91,9 +92,13 @@ public class SignupActivity extends AppCompatActivity {
     }
 
 
-    public void onSignupSuccess() {
+    public void onSignupSuccess(String name) {
         mSignupButton.setEnabled(true);
-        setResult(RESULT_OK);
+
+        Intent data = new Intent();
+        data.putExtra("name", name);
+
+        setResult(RESULT_OK, data);
         finish();
     }
 

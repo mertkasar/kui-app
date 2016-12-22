@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class App extends Application {
     public static final String TAG = App.class.getSimpleName();
@@ -13,8 +14,7 @@ public class App extends Application {
     public static App instance;
 
     public FirebaseAuth auth;
-
-    public String uid;
+    public FirebaseUser user;
 
     @Override
     public void onCreate() {
@@ -23,10 +23,6 @@ public class App extends Application {
         instance = this;
 
         auth = FirebaseAuth.getInstance();
-
-        uid = "-AbC68u";
-        //uid = "-T68ucHg";
-        //uid = "-BcA97f";
 
         Log.d(TAG, "onCreate: App created");
     }
@@ -45,5 +41,9 @@ public class App extends Application {
     public boolean isConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
+
+    public String getUID() {
+        return user.getUid();
     }
 }

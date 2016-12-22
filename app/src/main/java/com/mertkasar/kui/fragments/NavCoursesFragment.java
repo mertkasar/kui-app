@@ -92,7 +92,7 @@ public class NavCoursesFragment extends Fragment {
                                         DataSnapshot courseSnapshot = dataSnapshot.getChildren().iterator().next();
                                         final String courseKey = courseSnapshot.getKey();
 
-                                        mDB.getSubscribedCourse(mApp.uid, courseKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        mDB.getSubscribedCourse(mApp.getUID(), courseKey).addListenerForSingleValueEvent(new ValueEventListener() {
                                             private void redirectCourseDetail(String key) {
                                                 Intent intent = new Intent(getActivity(), CourseDetailActivity.class);
                                                 intent.putExtra(CourseDetailActivity.EXTRA_COURSE_KEY, key);
@@ -113,7 +113,7 @@ public class NavCoursesFragment extends Fragment {
                                                     return;
                                                 }
 
-                                                mDB.subscribeUser(mApp.uid, courseKey).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                mDB.subscribeUser(mApp.getUID(), courseKey).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
                                                         // TODO: Course not found after this line
@@ -249,7 +249,7 @@ public class NavCoursesFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(getActivity(), NewCourseActivity.class);
-                        intent.putExtra("EXTRA_USER_KEY", App.getInstance().uid);
+                        intent.putExtra("EXTRA_USER_KEY", App.getInstance().getUID());
                         startActivity(intent);
                     }
                 });

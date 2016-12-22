@@ -39,11 +39,11 @@ public class CoursesPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return CourseListFragment.newInstance(CourseListFragment.MODE_SUBSCRIBED, app.uid);
+                return CourseListFragment.newInstance(CourseListFragment.MODE_SUBSCRIBED, app.getUID());
             case 1:
-                return CourseListFragment.newInstance(CourseListFragment.MODE_CREATED, app.uid);
+                return CourseListFragment.newInstance(CourseListFragment.MODE_CREATED, app.getUID());
             case 2:
-                return CourseListFragment.newInstance(CourseListFragment.MODE_BROWSE, app.uid);
+                return CourseListFragment.newInstance(CourseListFragment.MODE_BROWSE, app.getUID());
         }
 
         return null;
