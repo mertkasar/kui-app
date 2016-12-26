@@ -174,7 +174,6 @@ public final class Database {
         return task;
     }
 
-
     public Task<Void> createCourse(final Course course) {
         String courseKey = refCourses.push().getKey();
 
@@ -323,22 +322,15 @@ public final class Database {
                 });
             }
         });
+//
+//        task.addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                removeUserRecentByKey(answer.owner, questionKey);
+//            }
+//        });
 
         return task;
-    }
-
-    public Transaction.Handler recordAnswer() {
-        return new Transaction.Handler() {
-            @Override
-            public Transaction.Result doTransaction(MutableData mutableData) {
-                return null;
-            }
-
-            @Override
-            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-
-            }
-        };
     }
 
     public DatabaseReference getAnswers() {

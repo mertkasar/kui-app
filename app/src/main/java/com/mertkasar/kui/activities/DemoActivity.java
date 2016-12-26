@@ -87,20 +87,20 @@ public class DemoActivity extends AppCompatActivity {
     }
 
     public void onPostAButtonClick(View view) {
-        if (!app.isConnected()) {
-            Toast.makeText(this, R.string.toast_not_connected, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        final Answer newAnswer = new Answer("option_0");
-
-        db.createAnswer(QUESTION_KEY, newAnswer).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                String status = newAnswer.is_correct ? "correct" : "false";
-                Toast.makeText(DemoActivity.this, "Your answer was " + status, Toast.LENGTH_SHORT).show();
-            }
-        });
+//        if (!app.isConnected()) {
+//            Toast.makeText(this, R.string.toast_not_connected, Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        final Answer newAnswer = new Answer("option_0");
+//
+//        db.createAnswer(QUESTION_KEY, newAnswer).addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                String status = newAnswer.is_correct ? "correct" : "false";
+//                Toast.makeText(DemoActivity.this, "Your answer was " + status, Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
     public void onGetUButtonClick(View view) {

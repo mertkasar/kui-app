@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.mertkasar.kui.R;
 import com.mertkasar.kui.core.App;
 import com.mertkasar.kui.core.Database;
+import com.mertkasar.kui.models.Answer;
 import com.mertkasar.kui.models.Question;
 
 import java.util.ArrayDeque;
@@ -299,36 +301,14 @@ public class QuizActivity extends AppCompatActivity {
         final RadioButton checkedButton = (RadioButton) mOptionsRadioGroup.findViewById(checkedID);
         String tag = (String) checkedButton.getTag();
 
-        final boolean isCorrect = tag.equals("option_0");
+        final Answer answer = new Answer(App.getInstance().getUID(), tag);
 
-        mDB.getQuestionByKey(mCurrentQuestionKey).runTransaction(new Transaction.Handler() {
+        mDB.createAnswer(mCurrentQuestionKey, answer).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public Transaction.Result doTransaction(MutableData mutableData) {
-                // Retrieve the question
-                Question question = mutableData.getValue(Question.class);
-                if (question == null) {
-                    return Transaction.success(mutableData);
-                }
+            public void onSuccess(Void aVoid) {
+                onCheckResult(checkedButton, answer.is_correct);
 
-                // Update values
-                question.answer_count = question.answer_count + 1;
-                if (isCorrect)
-                    question.correct_count = question.correct_count + 1;
-
-                //Finish transaction and report success
-                mutableData.setValue(question);
-                return Transaction.success(mutableData);
-            }
-
-            @Override
-            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-                if (databaseError == null) {
-                    mDB.removeUserRecentByKey(mUID, mCurrentQuestionKey);
-
-                    onCheckResult(checkedButton, isCorrect);
-
-                    mButtonViewFlipper.showNext();
-                }
+                mButtonViewFlipper.showNext();
             }
         });
     }
