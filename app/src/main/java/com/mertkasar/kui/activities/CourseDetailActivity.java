@@ -32,14 +32,19 @@ import com.mertkasar.kui.models.User;
 
 import java.util.ArrayList;
 
-public class CourseDetailActivity extends AppCompatActivity {
+public class CourseDetailActivity extends AppCompatActivity implements QuestionRecyclerViewAdapter.OnClickQuestionListener {
     public static final String TAG = CourseDetailActivity.class.getSimpleName();
 
     public static final String EXTRA_COURSE_KEY = "course-key";
     private static final int RC_NEW_QUESTION = 1;
 
+    private static final int DISPLAY_MODE_OWNER = 1;
+    private static final int DISPLAY_MODE_SUBSCRIBER = 2;
+    private static final int DISPLAY_MODE_VISITOR = 3;
+
     private String mCourseKey;
     private String mEnrollCode;
+    private int mDisplayMode;
 
     private ViewSwitcher mViewSwitcher;
     private ViewFlipper mQuestionsViewFlipper;
@@ -215,6 +220,8 @@ public class CourseDetailActivity extends AppCompatActivity {
     }
 
     private void onDisplayModeSubscriber() {
+        mDisplayMode = DISPLAY_MODE_SUBSCRIBER;
+
         mFAB.setImageResource(R.drawable.ic_play);
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -232,6 +239,8 @@ public class CourseDetailActivity extends AppCompatActivity {
     }
 
     private void onDisplayModeOwner() {
+        mDisplayMode = DISPLAY_MODE_OWNER;
+
         mFAB.setImageResource(R.drawable.ic_add);
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -246,6 +255,8 @@ public class CourseDetailActivity extends AppCompatActivity {
     }
 
     private void onDisplayModeVisitor() {
+        mDisplayMode = DISPLAY_MODE_VISITOR;
+
         mFAB.setImageResource(R.drawable.ic_subscribe);
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -321,5 +332,14 @@ public class CourseDetailActivity extends AppCompatActivity {
         refreshQuestions();
 
         mViewSwitcher.showNext();
+    }
+
+    @Override
+    public void onClickQuestionListener(String key) {
+        if (mDisplayMode == DISPLAY_MODE_OWNER) {
+            Intent intent = new Intent(CourseDetailActivity.this, AnswersActivity.class);
+            intent.putExtra(AnswersActivity.EXTRA_QUESTION_KEY, key);
+            startActivity(intent);
+        }
     }
 }

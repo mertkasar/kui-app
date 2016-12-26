@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Clickable and selectableItemBackground are optional -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/two_line_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
+    android:clickable="true"
+    android:minHeight="72dp"
+    android:paddingEnd="?listPreferredItemPaddingRight"
+    android:paddingStart="?listPreferredItemPaddingLeft">
+
+    <LinearLayout
+        android:id="@+id/lines_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_toEndOf="@+id/primary_action"
+        android:orientation="horizontal"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp">
+
+        <TextView
+            android:id="@+id/answer_owner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tools:text="&lt;answer-owner&gt;" />
+
+        <TextView
+            android:id="@+id/answer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textStyle="bold"
+            tools:text="&lt;answer&gt;" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/primary_action"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_person_48dp" />
+
+</RelativeLayout>

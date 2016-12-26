@@ -39,7 +39,7 @@ public class NewQuestionActivity extends AppCompatActivity {
 
         mCourseKey = getIntent().getStringExtra(EXTRA_COURSE_KEY);
         if (mCourseKey == null) {
-            throw new IllegalArgumentException("Must pass EXTRA_COURSE_KEY");
+            throw new IllegalArgumentException("Must pass EXTRA_QUESTION_KEY");
         }
 
         ActionBar actionBar = getSupportActionBar();

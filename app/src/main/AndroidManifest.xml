@@ -52,6 +52,15 @@
             android:name=".activities.SignupActivity"
             android:theme="@style/AppTheme.Dark"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.AnswersActivity"
+            android:label="@string/title_activity_answers"
+            android:parentActivityName=".activities.CourseDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mertkasar.kui.activities.CourseDetailActivity" />
+        </activity>
     </application>
 
 </manifest>

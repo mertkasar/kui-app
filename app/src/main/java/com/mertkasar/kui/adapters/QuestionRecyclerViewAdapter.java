@@ -3,7 +3,6 @@ package com.mertkasar.kui.adapters;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,7 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.mertkasar.kui.R;
-import com.mertkasar.kui.activities.QuizActivity;
+import com.mertkasar.kui.activities.AnswersActivity;
 import com.mertkasar.kui.models.Question;
 import com.mertkasar.kui.views.CircleView;
 
@@ -20,11 +19,11 @@ import java.util.List;
 public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRecyclerViewAdapter.ViewHolder> {
 
     private List<DataSnapshot> mDataSet;
-    private Activity mActivity;
+    private OnClickQuestionListener mListener;
 
-    public QuestionRecyclerViewAdapter(List<DataSnapshot> dataSet, Activity listener) {
+    public QuestionRecyclerViewAdapter(List<DataSnapshot> dataSet, OnClickQuestionListener listener) {
         mDataSet = dataSet;
-        mActivity = listener;
+        mListener = listener;
     }
 
     @Override
@@ -52,12 +51,7 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mActivity, QuizActivity.class);
-
-                intent.putExtra(QuizActivity.EXTRA_QUIZ_MODE, QuizActivity.QUIZ_MODE_SINGLE);
-                intent.putExtra(QuizActivity.EXTRA_QUESTION_KEY, holder.mKey);
-
-                mActivity.startActivity(intent);
+                mListener.onClickQuestionListener(holder.mKey);
             }
         });
     }
@@ -89,5 +83,9 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";
         }
+    }
+
+    public interface OnClickQuestionListener {
+        void onClickQuestionListener(final String key);
     }
 }

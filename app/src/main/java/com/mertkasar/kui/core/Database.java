@@ -337,6 +337,10 @@ public final class Database {
         return refAnswers;
     }
 
+    public DatabaseReference getAnswersByQuestionKey(final String questionKey) {
+        return refAnswers.child(questionKey);
+    }
+
     public DatabaseReference getAnswerByKey(String questionKey, String answerKey) {
         return refAnswers.child(questionKey).child(answerKey);
     }

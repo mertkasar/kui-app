@@ -72,4 +72,6 @@
     <string name="action_share">Share</string>
     <string name="chooser_share">Share</string>
     <string name="content_share" formatted="false">Check out this awesome quiz on Kui! Code: %s</string>
+    <string name="title_activity_answers">AnswersActivity</string>
+    <string name="section_answers">Answers</string>
 </resources>

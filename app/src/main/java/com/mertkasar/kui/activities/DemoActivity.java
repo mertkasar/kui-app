@@ -82,7 +82,7 @@ public class DemoActivity extends AppCompatActivity {
 
     public void onPostQButtonClick(View view) {
         Intent newPostIntent = new Intent(this, NewQuestionActivity.class);
-        newPostIntent.putExtra("EXTRA_COURSE_KEY", COURSE_KEY);
+        newPostIntent.putExtra("EXTRA_QUESTION_KEY", COURSE_KEY);
         startActivityForResult(newPostIntent, RC_NEW_QUESTION);
     }
 
@@ -120,7 +120,7 @@ public class DemoActivity extends AppCompatActivity {
 
     public void onGetCButtonClick(View view) {
         Intent newPostIntent = new Intent(this, CourseDetailActivity.class);
-        newPostIntent.putExtra("EXTRA_COURSE_KEY", COURSE_KEY);
+        newPostIntent.putExtra("EXTRA_QUESTION_KEY", COURSE_KEY);
         startActivity(newPostIntent);
     }
 

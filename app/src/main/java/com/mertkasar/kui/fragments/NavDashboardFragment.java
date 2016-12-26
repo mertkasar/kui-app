@@ -24,7 +24,7 @@ import com.mertkasar.kui.core.Database;
 
 import java.util.ArrayList;
 
-public class NavDashboardFragment extends Fragment {
+public class NavDashboardFragment extends Fragment implements QuestionRecyclerViewAdapter.OnClickQuestionListener {
     public static final String TAG = NavDashboardFragment.class.getSimpleName();
 
     private App mApp;
@@ -52,7 +52,7 @@ public class NavDashboardFragment extends Fragment {
         mUserKey = mApp.getUID();
 
         mQuestionList = new ArrayList<>();
-        mAdapter = new QuestionRecyclerViewAdapter(mQuestionList, getActivity());
+        mAdapter = new QuestionRecyclerViewAdapter(mQuestionList, this);
 
         getItems();
     }
@@ -138,5 +138,15 @@ public class NavDashboardFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onClickQuestionListener(String key) {
+        Intent intent = new Intent(getActivity(), QuizActivity.class);
+
+        intent.putExtra(QuizActivity.EXTRA_QUIZ_MODE, QuizActivity.QUIZ_MODE_SINGLE);
+        intent.putExtra(QuizActivity.EXTRA_QUESTION_KEY, key);
+
+        startActivity(intent);
     }
 }

@@ -33,7 +33,7 @@
         android:id="@+id/option_correct"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#E8F5E9"
+        android:background="@color/correct_ghost"
         android:hint="@string/hint_option_correct"
         android:inputType="textMultiLine"
         android:padding="@dimen/text_margin" />
@@ -42,7 +42,7 @@
         android:id="@+id/option_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFEBEE"
+        android:background="@color/wrong_ghost"
         android:hint="Option 1"
         android:inputType="textMultiLine"
         android:padding="@dimen/text_margin" />
@@ -51,7 +51,7 @@
         android:id="@+id/option_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFEBEE"
+        android:background="@color/wrong_ghost"
         android:hint="Option 2"
         android:inputType="textMultiLine"
         android:padding="@dimen/text_margin" />
@@ -60,7 +60,7 @@
         android:id="@+id/option_3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFEBEE"
+        android:background="@color/wrong_ghost"
         android:hint="Option 3"
         android:inputType="textMultiLine"
         android:padding="@dimen/text_margin" />
