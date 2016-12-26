@@ -1,7 +1,5 @@
 package com.mertkasar.kui.adapters;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +10,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.mertkasar.kui.R;
-import com.mertkasar.kui.activities.CourseDetailActivity;
+import com.mertkasar.kui.activities.AnswersActivity;
 import com.mertkasar.kui.core.Database;
 import com.mertkasar.kui.models.Answer;
-import com.mertkasar.kui.models.Course;
 import com.mertkasar.kui.models.User;
 
 import java.util.List;
@@ -41,7 +38,7 @@ public class AnswerRecyclerViewAdapter extends RecyclerView.Adapter<AnswerRecycl
         DataSnapshot current = mDataSet.get(position);
 
         holder.mItem = current.getValue(Answer.class);
-        holder.mAnswerView.setText(holder.mItem.choice);
+        holder.mAnswerView.setText(AnswersActivity.getChoiceAsChar(holder.mItem.choice));
 
         if (holder.mItem.is_correct) {
             holder.mView.setBackgroundResource(R.color.correct_ghost);

@@ -39,6 +39,7 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textAlignment="textEnd"
             android:textStyle="bold"
             tools:text="&lt;answer&gt;" />
     </LinearLayout>

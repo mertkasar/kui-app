@@ -16,10 +16,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.mertkasar.kui.R;
 import com.mertkasar.kui.adapters.AnswerRecyclerViewAdapter;
 import com.mertkasar.kui.core.Database;
+import com.mertkasar.kui.models.Answer;
 import com.mertkasar.kui.models.Question;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 public class AnswersActivity extends AppCompatActivity {
     public static final String TAG = CourseDetailActivity.class.getSimpleName();
@@ -38,6 +38,8 @@ public class AnswersActivity extends AppCompatActivity {
     private ArrayList<DataSnapshot> mAnswerDataSet;
     private AnswerRecyclerViewAdapter mAdapter;
 
+    private int[] choiceCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,8 @@ public class AnswersActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        choiceCount = new int[4];
 
         mDB = Database.getInstance();
 
@@ -68,7 +72,6 @@ public class AnswersActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Must pass " + EXTRA_QUESTION_KEY);
         }
 
-        getQuestion();
         getAnswers();
     }
 
@@ -79,6 +82,7 @@ public class AnswersActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     Question question = dataSnapshot.getValue(Question.class);
                     bindLayout(question);
+                    mAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -94,13 +98,17 @@ public class AnswersActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    Log.d(TAG, dataSnapshot.toString());
                     for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                        Answer answer = snap.getValue(Answer.class);
+                        int position = getChoiceAsInt(answer.choice);
+
+                        choiceCount[position] = choiceCount[position] + 1;
+
                         mAnswerDataSet.add(snap);
                     }
-
-                    mAdapter.notifyDataSetChanged();
                 }
+
+                getQuestion();
             }
 
             @Override
@@ -114,18 +122,62 @@ public class AnswersActivity extends AppCompatActivity {
         mTitleTextView.setText(question.title);
         mDescriptionTextView.setText(question.description);
 
-        Set<String> keys = question.options.keySet();
-        for (String key : keys) {
+        int totalCount = 0;
+        for (int i : choiceCount)
+            totalCount = totalCount + i;
+
+        int count = question.options.size();
+        for (int i = 0; i < count; i++) {
+            String key = "option_" + i;
             String option = question.options.get(key);
-            addOption(key, option);
+            int percent = (int) ((double) choiceCount[i] / (double) totalCount * 100);
+            addOption(key, option, percent);
         }
     }
 
-    private void addOption(final String tag, final String text) {
+    private void addOption(final String tag, final String text, int percent) {
         getLayoutInflater().inflate(R.layout.item_option_review, mContent);
-        TextView option = (TextView) mContent.getChildAt(mContent.getChildCount() - 1);
+        LinearLayout item = (LinearLayout) mContent.getChildAt(mContent.getChildCount() - 1);
 
-        option.setTag(tag);
-        option.setText(text);
+        TextView option = (TextView) item.findViewById(R.id.option);
+        TextView content = (TextView) item.findViewById(R.id.content);
+        TextView percentage = (TextView) item.findViewById(R.id.percentage);
+
+        option.setText(getChoiceAsChar(tag));
+        content.setText(text);
+        percentage.setText("%" + percent);
+
+        if (tag.endsWith("0")) {
+            option.setBackgroundResource(R.color.correct_ghost);
+        } else
+            option.setBackgroundResource(R.color.wrong_ghost);
+    }
+
+    public static String getChoiceAsChar(String tag) {
+        switch (tag) {
+            case "option_0":
+                return "A";
+            case "option_1":
+                return "B";
+            case "option_2":
+                return "C";
+            case "option_3":
+                return "D";
+        }
+
+        return "A";
+    }
+
+    public static int getChoiceAsInt(String tag) {
+        if (tag.endsWith("0"))
+            return 0;
+        else if (tag.endsWith("1"))
+            return 1;
+        else if (tag.endsWith("2"))
+            return 2;
+        else if (tag.endsWith("3"))
+            return 3;
+
+        return -1;
     }
 }
